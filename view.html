@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>siyu</title>
+	<link type="text/css" rel="stylesheet" href="css/view.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5e6ff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        /* 轮播图样式 */
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .slides {
+            display: flex;
+            width: 300%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .slide {
+            width: 33.33%;
+            height: 100%;
+            flex-shrink: 0;
+            position: relative;
+        }
+        
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(106, 13, 173, 0.7);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .slider-nav {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .slider-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        
+        .slider-dot.active {
+            background: white;
+        }
+
+        
+        /* 导航栏 */
+        nav {
+      
+            background-color: #8a2be2;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin-left: 200px;
+        }
+        
+        .nav-links li {
+            margin-right: 10px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background-color: #9932cc;
+            transform: translateY(-2px);
+        }
+        
+        .search-box {
+            display: flex;
+        }
+        
+        .search-box input {
+            padding: 8px;
+            border: none;
+            border-radius: 3px 0 0 3px;
+            width: 200px;
+        }
+        
+        .search-box button {
+            padding: 8px 15px;
+            background-color: #4b0082;
+            color: white;
+            border: none;
+            border-radius: 0 3px 3px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .search-box button:hover {
+            background-color: #5e00a3;
+        }
+        
+        /* 主要内容区 */
+       .aa1{
+        margin-top: 20px;
+       }
+       
+            /* 主内容区样式 */
+            .main-content {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 30px;
+                width: 90%;
+                margin-left: 70px;
+            }
+            
+            /* 内容框基础样式 */
+            .content-box {
+                background: white;
+                border-radius: 15px;
+                padding: 25px;
+                margin-bottom: 30px;
+                box-shadow: 0 5px 15px rgba(138, 43, 226, 0.1);
+                border: 2px solid #e6ccff;
+            }
+            
+            /* 视频专区标题 */
+            .video-header {
+                text-align: center;
+                background: linear-gradient(to right, #f5e6ff, #e6ccff);
+            }
+            
+            .video-header h1 {
+                color: #6a0dad;
+                font-size: 28px;
+                margin-bottom: 15px;
+            }
+            
+            .video-intro {
+                max-width: 800px;
+                margin: 0 auto;
+                line-height: 1.8;
+                color: #555;
+            }
+            
+            /* 精选视频 */
+            .featured-video {
+                background: linear-gradient(to bottom right, #f9f0ff, #e6ccff);
+            }
+            
+            .featured-video h2 {
+                text-align: center;
+                color: #8a2be2;
+                margin-bottom: 20px;
+            }
+            
+            .video-container {
+                display: flex;
+                gap: 20px;
+            }
+            
+            .video-container video {
+                width:60%;
+                height: 90%;
+                border-radius: 10px;
+                border: 3px solid #8a2be2;
+            }
+            
+            .video-info {
+                flex: 1;
+            }
+            
+            .video-info h3 {
+                color: #6a0dad;
+                margin-bottom: 10px;
+                font-size: 20px;
+            }
+            
+            .video-meta {
+                display: flex;
+                gap: 15px;
+                margin-bottom: 15px;
+                font-size: 14px;
+                color: #666;
+            }
+            
+            .video-desc {
+                line-height: 1.8;
+                margin-bottom: 20px;
+            }
+            
+            .video-actions {
+                display: flex;
+                gap: 10px;
+            }
+            
+            .video-actions button {
+                padding: 8px 15px;
+                border: none;
+                border-radius: 20px;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+            
+            .like-btn {
+                background: #8a2be2;
+                color: white;
+            }
+            
+            .collect-btn {
+                background: #ff69b4;
+                color: white;
+            }
+            
+            .share-btn {
+                background: #e6ccff;
+                color: #6a0dad;
+            }
+            
+            .video-actions button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            }
+            
+            /* 视频分类 */
+            .video-categories h2 {
+                color: #6a0dad;
+                margin-bottom: 20px;
+            }
+            
+            .category-tabs {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 20px;
+                flex-wrap: wrap;
+            }
+            
+            .tab-btn {
+                padding: 8px 15px;
+                background: #e6ccff;
+                border: none;
+                border-radius: 20px;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+            
+            .tab-btn.active {
+                background: #8a2be2;
+                color: white;
+            }
+            
+            .tab-btn:hover {
+                background: #ba55d3;
+                color: white;
+            }
+            
+            .video-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .video-item {
+                transition: all 0.3s;
+            }
+            
+            .video-item:hover {
+                transform: translateY(-5px);
+            }
+            
+            .video-thumbnail {
+                position: relative;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+            
+            .video-thumbnail img {
+                width: 100%;
+                aspect-ratio: 16/9;
+                object-fit: cover;
+            }
+            
+            .duration {
+                position: absolute;
+                bottom: 5px;
+                right: 5px;
+                background: rgba(0, 0, 0, 0.7);
+                color: white;
+                padding: 2px 5px;
+                border-radius: 3px;
+                font-size: 12px;
+            }
+            
+            .video-details {
+                padding: 10px 5px;
+            }
+            
+            .video-details h3 {
+                color: #6a0dad;
+                font-size: 16px;
+                margin-bottom: 5px;
+            }
+            
+            .views, .date {
+                font-size: 12px;
+                color: #666;
+            }
+            
+            .load-more {
+                display: block;
+                width: 100%;
+                padding: 10px;
+                margin-top: 20px;
+                background: #8a2be2;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background 0.3s;
+            }
+            
+            .load-more:hover {
+                background: #6a0dad;
+            }
+            
+            /* 热门系列 */
+            .video-series h2 {
+                color: #6a0dad;
+                margin-bottom: 20px;
+            }
+            
+            .series-container {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .series-item {
+                display: flex;
+                gap: 15px;
+                align-items: center;
+                padding: 10px;
+                border-radius: 8px;
+                transition: all 0.3s;
+            }
+            
+            .series-item:hover {
+                background: #f5e6ff;
+            }
+            
+            .series-item img {
+                width: 100px;
+                height: 60px;
+                object-fit: cover;
+                border-radius: 5px;
+                border: 2px solid #ba55d3;
+            }
+            
+            .series-info h3 {
+                color: #8a2be2;
+                font-size: 16px;
+                margin-bottom: 5px;
+            }
+            
+            .series-info p {
+                font-size: 12px;
+                color: #666;
+                margin-bottom: 3px;
+            }
+            
+            /* 侧边栏样式 */
+            .sidebar {
+                display: flex;
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            /* 播放列表 */
+            .playlist h2 {
+                color: #6a0dad;
+                margin-bottom: 15px;
+            }
+            
+            .playlist-items {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+            
+            .playlist-item {
+                display: flex;
+                gap: 10px;
+                padding: 10px;
+                border-radius: 8px;
+                transition: all 0.3s;
+            }
+            
+            .playlist-item.active {
+                background: #f5e6ff;
+            }
+            
+            .playlist-item:hover {
+                background: #e6ccff;
+            }
+            
+            .play-icon {
+                font-size: 20px;
+            }
+            
+            .playlist-info h3 {
+                color: #6a0dad;
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+            
+            .playlist-info p {
+                font-size: 12px;
+                color: #666;
+            }
+            
+            .new-playlist {
+                width: 100%;
+                padding: 8px;
+                background: #e6ccff;
+                color: #6a0dad;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+            
+            .new-playlist:hover {
+                background: #d8bfff;
+            }
+            
+            /* 推荐视频 */
+            .recommended h2 {
+                color: #6a0dad;
+                margin-bottom: 15px;
+            }
+            
+            .recommended-item {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 15px;
+                padding-bottom: 15px;
+                border-bottom: 1px dashed #e6ccff;
+            }
+            
+            .recommended-item:last-child {
+                border-bottom: none;
+            }
+            
+            .recommended-item img {
+                width: 100px;
+                height: 60px;
+                object-fit: cover;
+                border-radius: 5px;
+                border: 2px solid #8a2be2;
+            }
+            
+            .recommended-info h3 {
+                color: #6a0dad;
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+            
+            .recommended-info p {
+                font-size: 12px;
+                color: #666;
+            }
+            
+            /* 视频统计 */
+            .video-stats h2 {
+                color: #6a0dad;
+                margin-bottom: 15px;
+            }
+            
+            .stats-item {
+                text-align: center;
+                margin-bottom: 15px;
+            }
+            
+            .stats-number {
+                font-size: 24px;
+                font-weight: bold;
+                color: #8a2be2;
+            }
+            
+            .stats-label {
+                font-size: 14px;
+                color: #666;
+            }
+            
+            .stats-chart {
+                margin-top: 20px;
+            }
+            
+            .stats-chart h3 {
+                font-size: 16px;
+                color: #6a0dad;
+                margin-bottom: 10px;
+            }
+            
+            .chart-bar {
+                height: 25px;
+                margin-bottom: 10px;
+                border-radius: 5px;
+                color: white;
+                padding-left: 10px;
+                line-height: 25px;
+                width: var(--percent);
+                min-width: fit-content;
+            }
+            
+            /* 响应式设计 */
+            @media (max-width: 768px) {
+                .main-content {
+                    grid-template-columns: 1fr;
+                }
+                
+                .video-container {
+                    flex-direction: column;
+                }
+                
+                .video-container video {
+                    width: 100%;
+                }
+                
+                .video-grid {
+                    grid-template-columns: 1fr;
+                }
+                
+                .video-actions {
+                    flex-wrap: wrap;
+                }
+            }
+       
+        
+
+
+
+        
+        /* 页脚 */
+        footer {
+            background: linear-gradient(to right, #6a0dad, #8a2be2);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+        
+        .social-links {
+            margin: 15px 0;
+        }
+        
+        .social-links a {
+            color: white;
+            margin: 0 10px;
+            font-size: 24px;
+            text-decoration: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .slider {
+                height: 250px;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-bottom: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .search-box {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .search-box input {
+                width: 70%;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <!-- 轮播图 -->
+       <div class="slider">
+            <div class="slides">
+                <div class="slide">
+                    <img src="img/微信图片_20251013195942_75_255.jpg" alt="轮播图1">
+                   
+                </div>
+               <div class="slide">
+                    <img src="img/微信图片_20251013195941_74_255.jpg.jpg" alt="轮播图2">
+                </div>
+                <div class="slide">
+                    <img src="img/微信图片_20251013195943_76_255.jpg" alt="轮播图3">
+                </div>
+            </div>
+            
+        </div>
+        
+        <nav>
+            <div class="nav-container">
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="about.html">关于我</a></li>
+                    <li><a href="phone.html">相册集</a></li>
+                    <li><a href="view.html">视频专区</a></li>
+                    <li><a href="book.html">日记本</a></li>
+                    <li><a href="contact.html">联系我</a></li>
+                </ul>
+                <div class="search-box">
+                    <input type="text" placeholder="搜索siyu大人相关内容...">
+                    <button>搜索</button>
+                </div>
+            </div>
+        </nav>
+       
+        <div class="main-content">
+            <main>
+                <!-- 视频专区标题 -->
+                <div class="content-box video-header">
+                    <h1>📺 siyu大人video</h1>
+                    <p class="video-intro">小日子小生活小美好 记录每每每每每一天</p>
+                </div>
+        
+                <!-- 精选视频 -->
+                <div class="content-box featured-video">
+                    <h2>🌟 siyu大人喜欢的video</h2>
+                    <div class="video-container">
+                        <video controls poster=>
+                            <source src="img/212ac2e3c20e113093e6cd415cfb5a8a.mp4" type="video/mp4">
+                            您的浏览器不支持视频元素。
+                        </video>
+                        <div class="video-info">
+                            <h3>"阳光暖暖"</h3>
+                            <div class="video-meta">
+                                <span>播放量: 1203</span>
+                                <span>时长: 00:03</span>
+                                <span>发布时间: 2025.09.11</span>
+                            </div>
+                            <p class="video-desc">街头篇和米粒一起吃吃吃吃吃吃</p>
+                            <div class="video-actions">
+                                <button class="like-btn">👍 喜欢 (162)</button>
+                                <button class="collect-btn">❤️ 收藏 (5)</button>
+                                <button class="share-btn">↗️ 分享</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- 视频分类 -->
+                <div class="content-box video-categories">
+                    <h2>📂 Video frequency</h2>
+                    <div class="category-tabs">
+                        <button class="tab-btn active">全部视频</button>
+                        <button class="tab-btn">风景剪影</button>
+                        <button class="tab-btn">旅行瞬间</button>
+                        <button class="tab-btn">美味时刻</button>
+                        <button class="tab-btn">日常分享</button>
+                    </div>
+                    
+                      <div class="video-grid">
+                        <div class="video-item">
+                            <div class="video-thumbnail">
+                                <img src="./img/pic1.jpg" alt="视频缩略图1">
+                                <span class="duration">3:15</span>
+                            </div>
+                            <div class="video-details">
+                                <h3>siyu大人教你写日记</h3>
+                                <p class="views">播放量: 18.3万</p>
+                                <p class="date">2024.09.12</p>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <div class="video-thumbnail">
+                                <img src="./img/pic2.jpg" alt="视频缩略图2">
+                                <span class="duration">7:42</span>
+                            </div>
+                            <div class="video-details">
+                                <h3>厨艺大赛</h3>
+                                <p class="views">播放量: 32.7万</p>
+                                <p class="date">2024.08.25</p>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <div class="video-thumbnail">
+                                <img src="./img/pic3.jpg" alt="视频缩略图3">
+                                <span class="duration">4:56</span>
+                            </div>
+                            <div class="video-details">
+                                <h3>siyu大人逛吃日记</h3>
+                                <p class="views">播放量: 45.1万</p>
+                                <p class="date">2024.07.18</p>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <div class="video-thumbnail">
+                                <img src="./img/pic4.jpg" alt="视频缩略图4">
+                                <span class="duration">6:23</span>
+                            </div>
+                            <div class="video-details">
+                                <h3>阳光暖暖</h3>
+                                <p class="views">播放量: 12.9万</p>
+                                <p class="date">2024.06.30</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="load-more">加载更多视频</button>
+                </div>
+        
+              
+            </main>
+            
+            <aside class="sidebar">
+                <!-- 播放列表 -->
+                <div class="content-box playlist">
+                    <h2>🎵 播放列表（*o*）</h2>
+                    <div class="playlist-items">
+                        <div class="playlist-item active">
+                            <span class="play-icon">▶️</span>
+                            <div class="playlist-info">
+                                <h3>旅行瞬间</h3>
+                                <p>12个视频 · 更新于今天</p>
+                            </div>
+                        </div>
+                        <div class="playlist-item">
+                            <span class="play-icon">▶️</span>
+                            <div class="playlist-info">
+                                <h3>美味时刻</h3>
+                                <p>8个视频 · 更新于2025.10.15</p>
+                            </div>
+                        </div>
+                        <div class="playlist-item">
+                            <span class="play-icon">▶️</span>
+                            <div class="playlist-info">
+                                <h3>生活日常</h3>
+                                <p>5个视频 · 更新于2025.10.7</p>
+                            </div>
+                        </div>
+                        <div class="playlist-item">
+                            <span class="play-icon">▶️</span>
+                            <div class="playlist-info">
+                                <h3>siyu大人的喜欢</h3>
+                                <p>20个视频 · 更新于2025.10.12</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="new-playlist">+ 新建播放列表</button>
+                </div>
+        
+                <!-- 推荐视频 -->
+                <div class="content-box recommended">
+                    <h2>🔥 推荐视频</h2>
+                    <div class="recommended-item">
+                        <img src="img/微信图片_20251013200006_93_255.jpg" alt="推荐视频1">
+                        <div class="recommended-info">
+                            <h3>siyu大人逛吃篇</h3>
+                            <p>播放量: 541</p>
+                        </div>
+                    </div>
+                    <div class="recommended-item">
+                        <img src="img/微信图片_20251013200002_90_255.jpg" alt="推荐视频2">
+                        <div class="recommended-info">
+                            <h3>siyu大人逛吃篇2</h3>
+                            <p>播放量: 1441</p>
+                        </div>
+                    </div>
+                    <div class="recommended-item">
+                        <img src="img/微信图片_20251013200008_94_255.jpg" alt="推荐视频3">
+                        <div class="recommended-info">
+                            <h3>siyu大人逛吃篇3</h3>
+                            <p>播放量: 1665</p>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- 视频统计 -->
+                <div class="content-box video-stats">
+                    <h2>📊 视频统计</h2>
+                    <div class="stats-item">
+    <img src="img/微信图片_20251013195950_81_255.jpg" alt="吃饭" style="width: 228px; height: 243px;">
+</div>
+                
+                  
+                    <div class="stats-chart">
+                        <h3>视频类型分布</h3>
+                        <div class="chart-bar" style="--percent: 45%; background: #8a2be2;">风景剪影 45%</div>
+                        <div class="chart-bar" style="--percent: 25%; background: #9932cc;">旅行瞬间 25%</div>
+                        <div class="chart-bar" style="--percent: 20%; background: #ba55d3;">美味时刻 20%</div>
+                        <div class="chart-bar" style="--percent: 10%; background: #da70d6;">日常分享 10%</div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+        
+      
+    
+
+
+
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#">❤️</a>
+                <a href="#">📱</a>
+                <a href="#">🎵</a>
+                <a href="#">📺</a>
+                <a href="#">🛒</a>
+            </div>
+            
+        </div>
+    </footer>
+    
+    <script>
+        // 轮播图功能
+        const slides = document.querySelector('.slides');
+        const dots = document.querySelectorAll('.slider-dot');
+        let currentIndex = 0;
+        
+        function goToSlide(index) {
+            slides.style.transform = `translateX(-${index * 33.33}%)`;
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[index].classList.add('active');
+            currentIndex = index;
+        }
+        
+        dots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                goToSlide(parseInt(this.dataset.index));
+            });
+        });
+        
+        // 自动轮播
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % 3;
+            goToSlide(currentIndex);
+        }, 3000);
+        
+        // 搜索功能
+        document.querySelector('.search-box button').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-box input').value;
+            if (searchTerm.trim() !== '') {
+                alert('您搜索了: ' + searchTerm + '\n(这是一个模拟搜索功能)');
+            } else {
+                alert('请输入搜索内容');
+            }
+        });
+        
+              // 导航栏当前页指示  
+const navLinks = document.querySelectorAll('.nav-links a');  
+navLinks.forEach(link => {  
+    link.addEventListener('click', function() {  
+        // 先清除所有链接的背景色  
+        navLinks.forEach(l => l.style.backgroundColor = 'transparent');  
+        // 然后为当前点击的链接设置背景色  
+        this.style.backgroundColor = '#9932cc';  
+    });  
+});  
+        
+        // 默认激活首页链接
+        window.onload = function() {
+            navLinks[3].style.backgroundColor = '#9932cc';
+        };
+    </script>
+     
+     <script>
+        // 标签切换功能
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelector('.tab-btn.active').classList.remove('active');
+                this.classList.add('active');
+                // 这里可以添加实际切换视频内容的代码
+                console.log(`切换到${this.textContent}分类`);
+            });
+        });
+        
+        
+        // 播放列表项点击
+        document.querySelectorAll('.playlist-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelector('.playlist-item.active').classList.remove('active');
+                this.classList.add('active');
+                const playlistName = this.querySelector('h3').textContent;
+                console.log(`切换到播放列表: ${playlistName}`);
+            });
+        });
+        
+        // 新建播放列表
+        document.querySelector('.new-playlist').addEventListener('click', function() {
+            const playlistName = prompt('请输入新播放列表名称:');
+            if (playlistName) {
+                alert(`已创建新播放列表: ${playlistName}`);
+            }
+        });
+
+
+    // 获取所有tab按钮和视频项
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const videoItems = document.querySelectorAll('.video-item');
+    
+    // 模拟不同分类的视频数据
+    const videoData = {
+        '全部视频': [
+            {id: 1, thumb: './img/pic1.jpg', title: 'siyu教你写日记', duration: '3:15', views: '18.3万', date: '2024.09.12', category: '官方动画'},
+            {id: 2, thumb: './img/pic2.jpg', title: 'siyu大人逛吃日记', duration: '7:42', views: '32.7万', date: '2024.08.25', category: '官方动画'},
+            {id: 3, thumb: './img/pic3.jpg', title: '日常', duration: '4:56', views: '45.1万', date: '2024.07.18', category: '特别活动'},
+            {id: 4, thumb: './img/pic4.jpg', title: 'vlog', duration: '6:23', views: '12.9万', date: '2024.06.30', category: '粉丝创作'}
+        ],
+        '风景剪影': [
+            {id: 1, thumb: './img/海.jpg', title: '海', duration: '3:15', views: '18.3万', date: '2024.09.12', category: '官方动画'},
+            {id: 2, thumb: './img/日出.jpg', title: '日出', duration: '7:42', views: '32.7万', date: '2024.08.25', category: '官方动画'},
+            {id: 1, thumb: './img/日落.jpg', title: '日落', duration: '3:15', views: '18.3万', date: '2024.09.12', category: '官方动画'},
+
+            {id: 5, thumb: './img/街头.jpg', title: '街头', duration: '5:18', views: '15.6万', date: '2024.05.15', category: '官方动画'}
+        ],
+        '旅行瞬间': [
+        {id: 5, thumb: './img/微信图片_20251013200010_95_255.jpg', title: '瞬间1', duration: '5:18', views: '15.6万', date: '2024.05.15', category: '官方动画'},
+        {id: 4, thumb: './img/微信图片_20251013200012_96_255.jpg', title: '瞬间2', duration: '5:18', views: '15.6万', date: '2024.05.15', category: '官方动画'},
+
+            {id: 6, thumb: './img/微信图片_20251013200013_97_255.jpg', title: '瞬间3', duration: '8:12', views: '22.4万', date: '2024.04.22', category: '幕后花絮'},
+            {id: 7, thumb: './img/微信图片_20251013200014_98_255.jpg', title: '瞬间4', duration: '9:45', views: '18.9万', date: '2024.03.10', category: '幕后花絮'}
+       
+        ],
+        '美味时刻': [
+            {id: 4, thumb: './img/微信图片_20251013200006_93_255.jpg', title: '美食1', duration: '6:23', views: '12.9万', date: '2024.06.30', category: '粉丝创作'},
+            {id: 8, thumb: './img/微信图片_20251013200008_94_255.jpg', title: '美食2', duration: '4:37', views: '9.8万', date: '2024.02.28', category: '粉丝创作'}
+        ],
+        '日常分享': [
+            {id: 3, thumb: './img/微信图片_20251015140556_775_125.jpg', title: '纪念', duration: '4:56', views: '45.1万', date: '2024.07.18', category: '特别活动'},
+            {id: 9, thumb: './img/微信图片_20251015140552_771_125.jpg', title: '见面', duration: '12:30', views: '38.7万', date: '2024.01.15', category: '特别活动'}
+        ]
+    };
+
+    // 渲染视频列表函数
+    function renderVideos(category) {
+        const videoGrid = document.querySelector('.video-grid');
+        videoGrid.innerHTML = ''; // 清空当前视频列表
+        
+        const videos = videoData[category];
+        
+        videos.forEach(video => {
+            const videoItem = document.createElement('div');
+            videoItem.className = 'video-item';
+            videoItem.innerHTML = `
+                <div class="video-thumbnail">
+                    <img src="${video.thumb}" alt="视频缩略图">
+                    <span class="duration">${video.duration}</span>
+                </div>
+                <div class="video-details">
+                    <h3>${video.title}</h3>
+                    <p class="views">播放量: ${video.views}</p>
+                    <p class="date">${video.date}</p>
+                </div>
+            `;
+            videoGrid.appendChild(videoItem);
+        });
+    }
+
+    // 为每个tab按钮添加点击事件
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // 移除所有按钮的active类
+            tabBtns.forEach(btn => btn.classList.remove('active'));
+            // 为当前点击的按钮添加active类
+            this.classList.add('active');
+            
+            // 获取当前分类并渲染对应视频
+            const category = this.textContent;
+            renderVideos(category);
+            
+            // 重置加载更多按钮
+            const loadMoreBtn = document.querySelector('.load-more');
+            loadMoreBtn.textContent = '加载更多视频';
+            loadMoreBtn.disabled = false;
+        });
+    });
+
+    // 加载更多视频功能
+    document.querySelector('.load-more').addEventListener('click', function() {
+        const activeTab = document.querySelector('.tab-btn.active').textContent;
+        const currentVideos = videoData[activeTab];
+        
+        // 模拟加载更多数据
+        const moreVideos = {
+            '全部视频': [
+                {id: 10, thumb: './img/微信图片_20251013195940_73_255.jpg', title: '特辑', duration: '7:15', views: '28.6万', date: '2022.10.31', category: '特别活动'},
+                {id: 11, thumb: './img/微信图片_20251013195948_79_255.jpg', title: '展示', duration: '4:22', views: '14.3万', date: '2022.09.20', category: '官方动画'}
+            ],
+          
+        };
+        
+        // 合并新数据
+        videoData[activeTab] = [...currentVideos, ...moreVideos[activeTab]];
+        
+        // 重新渲染
+        renderVideos(activeTab);
+        
+        // 禁用按钮
+        this.textContent = '已加载全部视频';
+        this.disabled = true;
+    });
+
+    // 初始化显示"全部视频"
+    renderVideos('全部视频');
+
+    </script>
+
+
+
+</body>
+</html>

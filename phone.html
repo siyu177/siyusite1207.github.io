@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>siyu</title>
+	<link type="text/css" rel="stylesheet" href="css/phone.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5e6ff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        /* 轮播图样式 */
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .slides {
+            display: flex;
+            width: 300%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .slide {
+            width: 33.33%;
+            height: 100%;
+            flex-shrink: 0;
+            position: relative;
+        }
+        
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(106, 13, 173, 0.7);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .slider-nav {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .slider-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        
+        .slider-dot.active {
+            background: white;
+        }
+
+        
+        /* 导航栏 */
+        nav {
+      
+            background-color: #8a2be2;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin-left: 200px;
+        }
+        
+        .nav-links li {
+            margin-right: 10px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background-color: #9932cc;
+            transform: translateY(-2px);
+        }
+        
+        .search-box {
+            display: flex;
+        }
+        
+        .search-box input {
+            padding: 8px;
+            border: none;
+            border-radius: 3px 0 0 3px;
+            width: 200px;
+        }
+        
+        .search-box button {
+            padding: 8px 15px;
+            background-color: #4b0082;
+            color: white;
+            border: none;
+            border-radius: 0 3px 3px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .search-box button:hover {
+            background-color: #5e00a3;
+        }
+        
+        /* 主要内容区 */
+       
+            /* 主内容区样式 */
+            .main-content {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 30px;
+                margin-top: 20px;
+                width: 90%;
+                margin-left: 70px;
+            }
+            
+            /* 内容框基础样式 */
+            .content-box {
+                background: white;
+                border-radius: 15px;
+                padding: 25px;
+                margin-bottom: 30px;
+                box-shadow: 0 5px 15px rgba(138, 43, 226, 0.1);
+                border: 2px solid #e6ccff;
+            }
+            
+            /* 相册集标题 */
+            .album-header {
+                text-align: center;
+                background: linear-gradient(to right, #f5e6ff, #e6ccff);
+            }
+            
+            .album-header h1 {
+                color: #6a0dad;
+                font-size: 28px;
+                margin-bottom: 15px;
+            }
+            
+            .album-intro {
+                max-width: 800px;
+                margin: 0 auto;
+                line-height: 1.8;
+                color: #555;
+            }
+            
+            /* 精选照片 */
+            .featured-album {
+                background: linear-gradient(to bottom right, #f9f0ff, #e6ccff);
+            }
+            
+            .featured-album h2 {
+                text-align: center;
+                color: #8a2be2;
+                margin-bottom: 20px;
+            }
+            
+            .featured-photo {
+                display: flex;
+                gap: 20px;
+            }
+            
+            .featured-photo img {
+                width: 50%;
+                border-radius: 10px;
+                border: 3px solid #8a2be2;
+            }
+            
+            .photo-desc {
+                flex: 1;
+            }
+            
+            .photo-desc h3 {
+                color: #6a0dad;
+                margin-bottom: 10px;
+            }
+            
+            .photo-desc p {
+                line-height: 1.8;
+                margin-bottom: 15px;
+            }
+            
+            .photo-meta {
+                display: flex;
+                justify-content: space-between;
+                font-size: 14px;
+                color: #666;
+            }
+            
+            /* 相册分类 */
+            .album-categories h2 {
+                color: #6a0dad;
+                margin-bottom: 20px;
+            }
+            
+            .category-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .category-card {
+                position: relative;
+                border-radius: 10px;
+                overflow: hidden;
+                transition: transform 0.3s;
+            }
+            
+            .category-card:hover {
+                transform: translateY(-5px);
+            }
+            
+            .category-card img {
+                width: 100%;
+                height: 120px;
+                object-fit: cover;
+            }
+            
+            .category-info {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(106, 13, 173, 0.8);
+                color: white;
+                padding: 10px;
+            }
+            
+            .category-info h3 {
+                font-size: 16px;
+                margin-bottom: 5px;
+            }
+            
+            .category-info p {
+                font-size: 12px;
+            }
+            
+            /* 照片墙 */
+            .photo-wall{
+                width: 90%;
+                margin-left: 70px;
+                
+            }
+            .photo-wall h2 {
+                color: #6a0dad;
+                margin-bottom: 20px;
+            }
+            
+            .wall-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+            }
+            
+            .wall-item {
+                position: relative;
+                border-radius: 8px;
+                overflow: hidden;
+                aspect-ratio: 1/1;
+            }
+            
+            .wall-item img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.3s;
+            }
+            
+            .wall-item:hover img {
+                transform: scale(1.1);
+            }
+            
+            .wall-caption {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: rgba(138, 43, 226, 0.7);
+                color: white;
+                text-align: center;
+                padding: 5px;
+                font-size: 12px;
+            }
+            
+            .load-more {
+                display: block;
+                width: 100%;
+                padding: 10px;
+                margin-top: 20px;
+                background: #8a2be2;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background 0.3s;
+            }
+            
+            .load-more:hover {
+                background: #6a0dad;
+            }
+            
+            /* 照片故事 */
+            .photo-stories h2 {
+                color: #6a0dad;
+               
+            }
+            
+            .story-container {
+                display: flex;
+                gap: 20px;
+            }
+            
+            .story-photo {
+                flex: 0 0 300px;
+            }
+            
+            .story-photo img {
+                width: 100%;
+                border-radius: 10px;
+            }
+            
+            .story-text {
+                flex: 1;
+            }
+            
+            .story-text h3 {
+                color: #8a2be2;
+                margin-bottom: 15px;
+            }
+            
+            .story-text p {
+                line-height: 1.8;
+                margin-bottom: 15px;
+            }
+            
+            .story-meta {
+                display: flex;
+                justify-content: space-between;
+                font-size: 14px;
+                color: #666;
+            }
+            
+            /* 侧边栏样式 */
+            .sidebar {
+                display: flex;
+                flex-direction: column;
+                gap: 45px;
+            }
+            
+            /* 最新上传 */
+            .recent-uploads h2 {
+                color: #6a0dad;
+                margin-bottom: 15px;
+            }
+            
+            .recent-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+            
+            .recent-item {
+                text-align: center;
+            }
+            
+            .recent-item img {
+                width: 100%;
+                aspect-ratio: 1/1;
+                object-fit: cover;
+                border-radius: 8px;
+                border: 2px solid #ba55d3;
+            }
+            
+            .recent-item p {
+                font-size: 12px;
+                margin-top: 5px;
+            }
+            
+            /* 最受欢迎 */
+            .popular-photos h2 {
+                color: #6a0dad;
+                margin-bottom: 15px;
+            }
+            
+            .popular-list {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .popular-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .popular-rank {
+                background: #ff69b4;
+                color: white;
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+            }
+            
+            .popular-item img {
+                width: 50px;
+                height: 50px;
+                object-fit: cover;
+                border-radius: 5px;
+                border: 2px solid #8a2be2;
+            }
+            
+            .popular-info h3 {
+                font-size: 14px;
+                color: #6a0dad;
+                margin-bottom: 5px;
+            }
+            
+            .popular-info p {
+                font-size: 12px;
+                color: #666;
+            }
+            
+            /* 相册统计 */
+            .album-stats h2 {
+                color: #6a0dad;
+                margin-bottom: 15px;
+            }
+            
+            .stats-container {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+            }
+            
+            .stat-item {
+                text-align: center;
+            }
+            
+            .stat-number {
+                font-size: 24px;
+                font-weight: bold;
+                color: #8a2be2;
+            }
+            
+            .stat-label {
+                font-size: 12px;
+                color: #666;
+            }
+            
+            .stats-chart {
+                margin-top: 20px;
+            }
+            
+            .stats-chart h3 {
+                font-size: 16px;
+                color: #6a0dad;
+                margin-bottom: 10px;
+            }
+            
+            .chart-bar {
+                height: 25px;
+                margin-bottom: 10px;
+                border-radius: 5px;
+                color: white;
+                padding-left: 10px;
+                line-height: 25px;
+                width: var(--percent);
+                min-width: fit-content;
+            }
+            
+            /* 响应式设计 */
+            @media (max-width: 768px) {
+                .main-content {
+                    grid-template-columns: 1fr;
+                }
+                
+                .featured-photo {
+                    flex-direction: column;
+                }
+                
+                .featured-photo img {
+                    width: 100%;
+                }
+                
+                .category-grid {
+                    grid-template-columns: 1fr;
+                }
+                
+                .wall-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                
+                .story-container {
+                    flex-direction: column;
+                }
+                
+                .recent-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+     
+
+
+        
+        /* 页脚 */
+        footer {
+            background: linear-gradient(to right, #6a0dad, #8a2be2);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+        
+        .social-links {
+            margin: 15px 0;
+        }
+        
+        .social-links a {
+            color: white;
+            margin: 0 10px;
+            font-size: 24px;
+            text-decoration: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .slider {
+                height: 250px;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-bottom: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .search-box {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .search-box input {
+                width: 70%;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    
+    <div class="container">
+        <!-- 轮播图 -->
+        <div class="slider">
+            <div class="slides">
+                <div class="slide">
+                    <img src="img/微信图片_20251013195942_75_255.jpg" alt="轮播图1">
+                   
+                </div>
+                <div class="slide">
+                    <img src="img/微信图片_20251013195941_74_255.jpg.jpg" alt="轮播图2">
+                </div>
+                <div class="slide">
+                    <img src="img/微信图片_20251013195943_76_255.jpg" alt="轮播图3">
+                </div>
+            </div>
+            
+        </div>
+        
+        <nav>
+            <div class="nav-container">
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="about.html">关于我</a></li>
+                    <li><a href="phone.html">相册集</a></li>
+                    <li><a href="view.html">视频专区</a></li>
+                    <li><a href="book.html">日记本</a></li>
+                    <li><a href="contact.html">联系我</a></li>
+                </ul>
+                <div class="search-box">
+                    <input type="text" placeholder="搜索siyu大人相关内容...">
+                    <button>搜索</button>
+                </div>
+            </div>
+        </nav>
+       
+
+
+        <div class="main-content">
+            <main>
+                <!-- 相册集标题 -->
+                <div class="content-box album-header">
+                    <h1>♡ 日子里的点滴 ♡</h1>
+                    <p class="album-intro">幸福就像一滴水，慢慢浸佢慢慢叹佢</p>
+                </div>
+        
+                <!-- 精选照片展示 -->
+                <div class="content-box featured-album">
+                    <h2>✨ 新年的第一张照片 ✨</h2>
+                    <div class="featured-photo">
+                        <img src="img/微信图片_20251013195956_85_255.jpg" alt="精选照片">
+                        <div class="photo-desc">
+                            <h3>2025.1.1元旦</h3>
+                            <p>2025年元旦，和恩彤又一年。和她一起跨的第二个年！！</p>
+                            <div class="photo-meta">
+                                <span>拍摄日期: 2025.1.1</span>
+                                <span>收藏数: 1,25</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                
+           
+        
+                <!-- 照片故事 -->
+                <div class="content-box photo-stories">
+                    <h2>📖 照片背后的故事</h2>
+                    <div class="story-container">
+                        <div class="story-photo">
+                            <img src="img/微信图片_20251013200010_95_255.jpg" alt="故事照片">
+                        </div>
+                        <div class="story-text">
+                            <h3>和米粒一起散步</h3>
+                            <p>在三坊七巷，天气好热好热。</p>
+                            <p>米粒找了好几个地方和角度给我拍照，最后在我发呆的时候拍下了我最喜欢的一张（就是这张）嘿嘿！你要问我想去哪，其实我也不知道，我只知道你想去的我都会陪你去，你想做的我都会陪你做。。说到做到</p>
+                            <div class="story-meta">
+                                <span>拍摄者: 米粒</span>
+                                <span>拍摄时间: 7.6</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            
+            <aside class="sidebar">
+                <!-- 最新上传 -->
+                <div class="content-box recent-uploads">
+                    <h2>🆕 恩彤拍摄专栏</h2>
+                    <div class="recent-grid">
+                        <div class="recent-item">
+                            <img src="img/微信图片_20251013195936_70_255.jpg" alt="最新照片1">
+                            <p>恩彤给我拍的照片-唱歌ing</p>
+                        </div>
+                        <div class="recent-item">
+                            <img src="img/微信图片_20251013195933_68_255.jpg" alt="最新照片2">
+                            <p>恩彤给我拍的照片-吃饭ing</p>
+                        </div>
+                        <div class="recent-item">
+                            <img src="img/微信图片_20251013195958_86_255.jpg" alt="最新照片3">
+                            <p>恩彤给我拍的照片-假期第一面</p>
+                        </div>
+						   <div class="recent-item">
+                            <img src="img/微信图片_20251013195953_83_255.jpg" alt="最新照片2">
+                            <p>恩彤给我拍的照片-元旦</p>
+                        </div>
+						 <div class="recent-item">
+                            <img src="img/微信图片_20251015140543_763_125.jpg">
+                            <p>恩彤给我拍的照片-元旦</p>
+                        </div>
+						 <div class="recent-item">
+                            <img src="img/微信图片_20251015140536_757_125.jpg" alt="最新照片2">
+                            <p>恩彤给我拍的照片-厦门</p>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- 最受欢迎 -->
+                <div class="content-box popular-photos">
+                    <h2>🔥 和米粒一起的瞬间</h2>
+                    <div class="popular-list">
+                        <div class="popular-item">
+                            <span class="popular-rank">1</span>
+                            <img src="img/微信图片_20251015135157_756_125.jpg" alt="热门照片1">
+                            <div class="popular-info">
+                                <h3>zhangzhou</h3>
+                                <p>浏览: 2,345</p>
+                            </div>
+                        </div>
+                        <div class="popular-item">
+                            <span class="popular-rank">2</span>
+                            <img src="img/微信图片_20251015135155_755_125.jpg" alt="热门照片2">
+                            <div class="popular-info">
+                                <h3>putian</h3>
+                                <p>浏览: 1,987</p>
+                            </div>
+                        </div>
+                        <div class="popular-item">
+                            <span class="popular-rank">3</span>
+                            <img src="img/微信图片_20251015135154_754_125.jpg" alt="热门照片3">
+                            <div class="popular-info">
+                                <h3>pingtan</h3>
+                                <p>浏览: 1,756</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- 相册统计 -->
+                <div class="content-box album-stats">
+                    <h2>📊 相册统计</h2>
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <div class="stat-number">436</div>
+                            <div class="stat-label">总照片数</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">24</div>
+                            <div class="stat-label">相册分类</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">10,892</div>
+                            <div class="stat-label">总浏览数</div>
+                        </div>
+                    </div>
+                    <div class="stats-chart">
+                        <h3>照片分类比例</h3>
+                        <div class="chart-bar" style="--percent: 40%; background: #8a2be2;">日常生活 40%</div>
+                        <div class="chart-bar" style="--percent: 25%; background: #9932cc;">吃漂亮饭 25%</div>
+                        <div class="chart-bar" style="--percent: 20%; background: #ba55d3;">旅游出行 20%</div>
+                        <div class="chart-bar" style="--percent: 15%; background: #da70d6;">搞怪时刻 15%</div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+        
+    
+            <!-- 照片墙 -->
+            <div class="content-box photo-wall">
+                <h2>📷 siyu大人的海边日志</h2>
+                <div class="wall-grid">
+                    <div class="wall-item">
+                        <img src="img/海边1.jpg" alt="照片1">
+                      
+                    </div>
+                    <div class="wall-item">
+                        <img src="img/海边二.jpg" alt="照片2">
+                    </div>
+                    <div class="wall-item">
+                        <img src="img/背影.jpg" alt="照片3">
+                    </div>
+                    <div class="wall-item">
+                        <img src="img/街头.jpg" alt="照片4">
+                    </div>
+                    <div class="wall-item">
+                        <img src="img/微信图片_20251013200013_97_255.jpg" alt="照片5">
+                    </div>
+                    <div class="wall-item">
+                        <img src="img/海.jpg" alt="照片6">
+                    </div>
+                    <div class="wall-item">
+                        <img src="img/日出.jpg" alt="照片7">
+                    </div>
+                    <div class="wall-item">
+                        <img src="img/微信图片_20251013200014_98_255.jpg" alt="库洛米照片8">
+                    </div>
+                </div>
+                <button class="load-more">加载更多照片</button>
+            </div>
+
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#">❤️</a>
+                <a href="#">📱</a>
+                <a href="#">🎵</a>
+                <a href="#">📺</a>
+                <a href="#">🛒</a>
+            </div>
+            
+        </div>
+    </footer>
+    
+    <script>
+        // 轮播图功能
+        const slides = document.querySelector('.slides');
+        const dots = document.querySelectorAll('.slider-dot');
+        let currentIndex = 0;
+        
+        function goToSlide(index) {
+            slides.style.transform = `translateX(-${index * 33.33}%)`;
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[index].classList.add('active');
+            currentIndex = index;
+        }
+        
+        dots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                goToSlide(parseInt(this.dataset.index));
+            });
+        });
+        
+        // 自动轮播
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % 3;
+            goToSlide(currentIndex);
+        }, 3000);
+        
+        // 搜索功能
+        document.querySelector('.search-box button').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-box input').value;
+            if (searchTerm.trim() !== '') {
+                alert('您搜索了: ' + searchTerm + '\n(这是一个模拟搜索功能)');
+            } else {
+                alert('请输入搜索内容');
+            }
+        });
+        
+              // 导航栏当前页指示  
+const navLinks = document.querySelectorAll('.nav-links a');  
+navLinks.forEach(link => {  
+    link.addEventListener('click', function() {  
+        // 先清除所有链接的背景色  
+        navLinks.forEach(l => l.style.backgroundColor = 'transparent');  
+        // 然后为当前点击的链接设置背景色  
+        this.style.backgroundColor = '#9932cc';  
+    });  
+});  
+        
+        // 默认激活首页链接
+        window.onload = function() {
+            navLinks[2].style.backgroundColor = '#9932cc';
+        };
+    </script>
+     
+     <script>
+        // 加载更多照片功能
+        document.querySelector('.load-more').addEventListener('click', function() {
+            const wallGrid = document.querySelector('.wall-grid');
+            const newItems = [
+                {img: './img/pic1.jpg' },
+                {img: './img/pic2.jpg' },
+                {img: './img/pic3.jpg' },
+                {img: './img/pic4.jpg' },
+            ];
+            
+            newItems.forEach(item => {
+                const wallItem = document.createElement('div');
+                wallItem.className = 'wall-item';
+                wallItem.innerHTML = `
+                    <img src="${item.img}" alt="照片">
+                   
+                `;
+                wallGrid.appendChild(wallItem);
+            });
+            
+            this.textContent = '已加载更多照片';
+            this.disabled = true;
+        });
+        
+        // 分类卡片点击效果
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const category = this.querySelector('h3').textContent;
+                alert(`即将打开${category}相册`);
+            });
+        });
+        
+        // 照片悬停效果
+        document.querySelectorAll('.wall-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.boxShadow = '0 5px 15px rgba(138, 43, 226, 0.3)';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.boxShadow = '';
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>siyu</title>
+	<link type="text/css" rel="stylesheet" href="css/book.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5e6ff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        /* 轮播图样式 */
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .slides {
+            display: flex;
+            width: 300%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .slide {
+            width: 33.33%;
+            height: 100%;
+            flex-shrink: 0;
+            position: relative;
+        }
+        
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(106, 13, 173, 0.7);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .slider-nav {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .slider-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        
+        .slider-dot.active {
+            background: white;
+        }
+
+        
+        /* 导航栏 */
+        nav {
+      
+            background-color: #8a2be2;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin-left: 200px;
+        }
+        
+        .nav-links li {
+            margin-right: 10px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background-color: #9932cc;
+            transform: translateY(-2px);
+        }
+        
+        .search-box {
+            display: flex;
+        }
+        
+        .search-box input {
+            padding: 8px;
+            border: none;
+            border-radius: 3px 0 0 3px;
+            width: 200px;
+        }
+        
+        .search-box button {
+            padding: 8px 15px;
+            background-color: #4b0082;
+            color: white;
+            border: none;
+            border-radius: 0 3px 3px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .search-box button:hover {
+            background-color: #5e00a3;
+        }
+        
+        /* 主要内容区 */
+     
+            /* 主内容区样式 */
+            .main-content {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 30px;
+                margin-top: 20px;
+                width: 90%;
+                margin-left: 70px;
+            }
+            
+            /* 内容框基础样式 */
+            .content-box {
+                background: white;
+                border-radius: 15px;
+                padding: 25px;
+                margin-bottom: 30px;
+                box-shadow: 0 5px 15px rgba(138, 43, 226, 0.1);
+                border: 2px solid #e6ccff;
+            }
+            
+            /* 日记本封面 */
+            .diary-cover {
+                background: linear-gradient(135deg, #f5e6ff, #e6ccff);
+                text-align: center;
+            }
+            
+            .diary-cover h1 {
+                color: #6a0dad;
+                font-size: 28px;
+                margin-bottom: 15px;
+            }
+            
+            .diary-intro {
+                max-width: 600px;
+                margin: 0 auto 20px;
+                line-height: 1.8;
+                color: #555;
+            }
+            
+            .cover-image img {
+                max-width: 90%;
+                border-radius: 10px;
+                border: 3px solid #8a2be2;
+            }
+            
+            /* 最新日记 */
+            .latest-diary h2 {
+                color: #6a0dad;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            
+            .diary-entry {
+                background: #f9f0ff;
+                border-radius: 10px;
+                padding: 20px;
+                border-left: 5px solid #8a2be2;
+            }
+            
+            .diary-header {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 15px;
+                font-size: 14px;
+                color: #666;
+            }
+            
+            .diary-content {
+                line-height: 1.8;
+            }
+            
+            .diary-content p {
+                margin-bottom: 15px;
+                text-indent: 2em;
+            }
+            
+            .diary-footer {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 15px;
+                font-size: 14px;
+                color: #666;
+                font-style: italic;
+            }
+            
+            /* 日记精选 */
+            .diary-collection h2 {
+                color: #6a0dad;
+                margin-bottom: 20px;
+                text-align: center;
+               
+            }
+            .diary-collection {
+                width: 90%;
+                margin-left: 70px;
+            }
+            .collection-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+            }
+            
+            .diary-card {
+                background: white;
+                border-radius: 8px;
+                padding: 15px;
+                box-shadow: 0 3px 10px rgba(138, 43, 226, 0.1);
+                border: 1px solid #e6ccff;
+                transition: transform 0.3s;
+            }
+            
+            .diary-card:hover {
+                transform: translateY(-5px);
+            }
+            
+            .card-header {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 10px;
+                font-size: 12px;
+                color: #666;
+            }
+            
+            .diary-card h3 {
+                color: #8a2be2;
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+            
+            .card-content {
+                font-size: 14px;
+                line-height: 1.6;
+                margin-bottom: 10px;
+            }
+            
+            .card-content p {
+                margin-bottom: 10px;
+            }
+            
+            .card-footer {
+                text-align: right;
+                font-size: 20px;
+            }
+            
+            .view-more {
+                display: block;
+                width: 100%;
+                padding: 10px;
+                margin-top: 20px;
+                background: #8a2be2;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background 0.3s;
+            }
+            
+            .view-more:hover {
+                background: #6a0dad;
+            }
+            
+            /* 每月精选 */
+            .monthly-picks h2 {
+                color: #6a0dad;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            
+            .monthly-diary {
+                display: flex;
+                gap: 20px;
+            }
+            
+            .diary-image {
+                flex: 0 0 250px;
+            }
+            
+            .diary-image img {
+                width: 100%;
+                border-radius: 8px;
+                border: 3px solid #9932cc;
+            }
+            
+            .image-caption {
+                text-align: center;
+                font-size: 12px;
+                color: #666;
+                margin-top: 5px;
+                font-style: italic;
+            }
+            
+            .diary-excerpt {
+                flex: 1;
+            }
+            
+            .diary-excerpt h3 {
+                color: #8a2be2;
+                margin-bottom: 15px;
+            }
+            
+            .excerpt-content {
+                line-height: 1.8;
+            }
+            
+            .excerpt-content p {
+                margin-bottom: 15px;
+            }
+            
+            .excerpt-content ol {
+                margin-bottom: 15px;
+                padding-left: 2em;
+            }
+            
+            .excerpt-footer {
+                text-align: right;
+                font-size: 14px;
+                color: #666;
+                font-style: italic;
+            }
+            
+            /* 侧边栏样式 */
+            .sidebar {
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            /* 日记分类 */
+            .diary-categories h2 {
+                color: #6a0dad;
+                margin-bottom: 15px;
+            }
+            
+            .category-list {
+                list-style: none;
+            }
+            
+            .category-item {
+                display: flex;
+                align-items: center;
+                padding: 10px 0;
+                border-bottom: 1px dashed #e6ccff;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+            
+            .category-item:hover {
+                background: #f5e6ff;
+            }
+            
+            .category-icon {
+                font-size: 20px;
+                margin-right: 10px;
+                width: 30px;
+                text-align: center;
+            }
+            
+            .category-name {
+                flex: 1;
+            }
+            
+            .category-count {
+                font-size: 12px;
+                color: #666;
+            }
+            
+            /* 热门日记 */
+            .popular-diaries h2 {
+                color: #6a0dad;
+                margin-bottom: 15px;
+            }
+            
+            .popular-list {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .popular-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 10px;
+                border-radius: 5px;
+                transition: all 0.3s;
+            }
+            
+            .popular-item:hover {
+                background: #f5e6ff;
+            }
+            
+            .popular-rank {
+                background: #ff69b4;
+                color: white;
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+            }
+            
+            .popular-content h3 {
+                font-size: 14px;
+                color: #6a0dad;
+                margin-bottom: 5px;
+            }
+            
+            .popular-content p {
+                font-size: 12px;
+                color: #666;
+            }
+            
+            /* 日记统计 */
+            .diary-stats h2 {
+                color: #6a0dad;
+                margin-bottom: 15px;
+            }
+            
+            .stats-container {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 20px;
+            }
+            
+            .stats-item {
+                text-align: center;
+            }
+            
+            .stats-number {
+                font-size: 24px;
+                font-weight: bold;
+                color: #8a2be2;
+            }
+            
+            .stats-label {
+                font-size: 12px;
+                color: #666;
+            }
+            
+            .stats-mood h3 {
+                font-size: 16px;
+                color: #6a0dad;
+                margin-bottom: 10px;
+            }
+            
+            .mood-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .mood-item {
+                font-size: 14px;
+                padding: 5px;
+                background: #f5e6ff;
+                border-radius: 5px;
+            }
+            
+            /* 响应式设计 */
+            @media (max-width: 768px) {
+                .main-content {
+                    grid-template-columns: 1fr;
+                }
+                
+                .collection-grid {
+                    grid-template-columns: 1fr;
+                }
+                
+                .monthly-diary {
+                    flex-direction: column;
+                }
+                
+                .diary-image {
+                    flex: 1 1 100%;
+                }
+            }
+       
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .slider {
+                height: 250px;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-bottom: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .search-box {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .search-box input {
+                width: 70%;
+            }
+        }
+         /* 页脚 */
+         footer {
+            background: linear-gradient(to right, #6a0dad, #8a2be2);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+        
+        .social-links {
+            margin: 15px 0;
+        }
+        
+        .social-links a {
+            color: white;
+            margin: 0 10px;
+            font-size: 24px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    
+    
+    <div class="container">
+        <!-- 轮播图 -->
+        <div class="slider">
+            <div class="slides">
+                <div class="slide">
+                    <img src="img/微信图片_20251013195942_75_255.jpg" alt="轮播图1">
+                   
+                </div>
+                <div class="slide">
+                    <img src="img/微信图片_20251013195941_74_255.jpg.jpg" alt="轮播图2">
+                </div>
+                <div class="slide">
+                    <img src="img/微信图片_20251013195943_76_255.jpg" alt="轮播图3">
+                </div>
+            </div>
+            
+        </div>
+        
+        <nav>
+            <div class="nav-container">
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="about.html">关于我</a></li>
+                    <li><a href="phone.html">相册集</a></li>
+                    <li><a href="view.html">视频专区</a></li>
+                    <li><a href="book.html">日记本</a></li>
+                    <li><a href="contact.html">联系我</a></li>
+                </ul>
+                <div class="search-box">
+                    <input type="text" placeholder="搜索库洛米相关内容...">
+                    <button>搜索</button>
+                </div>
+            </div>
+        </nav>
+       
+       
+      
+        <div class="main-content">
+            <main>
+                <!-- 日记本封面 -->
+                <div class="content-box diary-cover">
+                    <div class="cover-content">
+                        <h1>📖 心情小日记 📖</h1>
+                        <p class="diary-intro">siyu大人言：感知幸福也是一种能力</p>
+                        <div class="cover-image">
+                            <img src="img/微信图片_20251013200002_90_255.jpg" alt="日记本封面">
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- 最新日记 -->
+                <div class="content-box latest-diary">
+                    <h2>✨ 碎碎念 ✨</h2>
+                    <div class="diary-entry">
+                        <div class="diary-header">
+                            <span class="diary-date">202年10月13日 星期二</span>
+                            <span class="diary-weather">☀️ 晴天</span>
+                        </div>
+                        <div class="diary-content">
+                            <p>今天好累好累好累，好冷好冷，好想回宿舍躺着。</p>
+                            <p>最近都没有好好和米粒一起玩游戏。他最近老没空，睡的又早，背老半天科目三。算了不找他完了</p>
+                            <p>做完了很多作业，小开心</p>
+                        </div>
+                        <div class="diary-footer">
+                            <span class="diary-mood">心情: 😈 小开心</span>
+                            <span class="diary-location">地点: JLDH</span>
+                        </div>
+                    </div>
+                </div>
+        
+              
+        
+                <!-- 每月精选 -->
+                <div class="content-box monthly-picks">
+                    <h2>📅 文案记录</h2>
+                    <div class="monthly-diary">
+                        <div class="diary-image">
+                            <img src="img/微信图片_20251013200004_91_255.jpg" alt="日记">
+                            <div class="image-caption">"红苹果味道"</div>
+                        </div>
+                        <div class="diary-excerpt">
+                            <h3>喜欢的DY文案</h3>
+                            <div class="excerpt-content">
+                                <p>幸福感满满文案：</p>
+                                <ol>
+                                    <li>幸福无限蔓延</li>
+<li>日子像旋转木马</li>
+<li>此刻 幸福具象化</li>
+<li>春日载阳 福履齐长</li>
+<li>被幸福感包围的最近</li>
+<li>树是风盈过夏天的绿海</li>
+<li>镜头邂逅阳光折射幸福</li>
+<li>幸福是一只溢汁的小汤包</li>
+<li>苹果的第十万六千个故事</li>
+<li>生命是一颗长满可能的树</li>
+<li>只今只到梅子熟时栀子香</li>
+<li>要你明媚似骄阳 自由且善良</li>
+<li>幸福给我的照片增添了饱和度</li>
+<li>小小世界 有你在我身边就够了</li>
+<li>我与土地缠绵 生长出又一个春天</li>
+<li>打开生活的天窗 阳光自会照进来</li>
+<li>拍下幸福的瞬间 永远没有完结篇</li>
+<li>拍下幸福的瞬间 这样 我也站在幸福里</li>
+                                </ol>
+                               
+                            </div>
+                            <div class="excerpt-footer">
+                                <span>—— 节选自DY</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            
+            <aside class="sidebar">
+
+                   <!-- 热门日记 -->
+                   <div class="content-box popular-diaries">
+                    <h2>🔥 热门日记</h2>
+                    <div class="popular-list">
+                        <div class="popular-item">
+                            <div class="popular-rank">1</div>
+                            <div class="popular-content">
+                                <h3>好想出去玩</h3>
+                                <p>阅读量: 256</p>
+                            </div>
+                        </div>
+                        <div class="popular-item">
+                            <div class="popular-rank">2</div>
+                            <div class="popular-content">
+                                <h3>米粒又睡着了</h3>
+                                <p>阅读量: 121</p>
+                            </div>
+                        </div>
+                        <div class="popular-item">
+                            <div class="popular-rank">3</div>
+                            <div class="popular-content">
+                                <h3>看兔子谈恋爱</h3>
+                                <p>阅读量: 3,87</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 日记分类 -->
+                <div class="content-box diary-categories">
+                    <h2>🗂️ 日记分类</h2>
+                    <ul class="category-list">
+                        <li class="category-item">
+                            <span class="category-icon">😈</span>
+                            <span class="category-name">旅游计划</span>
+                            <span class="category-count">(42篇)</span>
+                        </li>
+                        <li class="category-item">
+                            <span class="category-icon">🍰</span>
+                            <span class="category-name">美食日记</span>
+                            <span class="category-count">(28篇)</span>
+                        </li>
+                        <li class="category-item">
+                            <span class="category-icon">🎵</span>
+                            <span class="category-name">音乐时光</span>
+                            <span class="category-count">(15篇)</span>
+                        </li>
+                        <li class="category-item">
+                            <span class="category-icon">👯</span>
+                            <span class="category-name">朋友之间</span>
+                            <span class="category-count">(37篇)</span>
+                        </li>
+                        <li class="category-item">
+                            <span class="category-icon">💭</span>
+                            <span class="category-name">心情随笔</span>
+                            <span class="category-count">(23篇)</span>
+                        </li>
+                        <li class="category-item">  
+                            <span class="category-icon">📚</span>  
+                            <span class="category-name">书籍推荐</span>  
+                            <span class="category-count">(19篇)</span>  
+                        </li>  
+                        <li class="category-item">  
+                            <span class="category-icon">🧳</span>  
+                            <span class="category-name">旅行日志</span>  
+                            <span class="category-count">(30篇)</span>  
+                        </li>  
+                        <li class="category-item">  
+                            <span class="category-icon">🤖</span>  
+                            <span class="category-name">科技探讨</span>  
+                            <span class="category-count">(12篇)</span>  
+                        </li>  
+                        <li class="category-item">  
+                            <span class="category-icon">🎨</span>  
+                            <span class="category-name">创意手工</span>  
+                            <span class="category-count">(10篇)</span>  
+                        </li>  
+                        <li class="category-item">  
+                            <span class="category-icon">🌱</span>  
+                            <span class="category-name">生活小技巧</span>  
+                            <span class="category-count">(8篇)</span>  
+                        </li>  
+                    </ul>
+                </div>
+        
+             
+        
+                <!-- 日记统计 -->
+                <div class="content-box diary-stats">
+                    <h2>📊 日记统计</h2>
+                    <div class="stats-container">
+                        <div class="stats-item">
+                            <div class="stats-number">145</div>
+                            <div class="stats-label">总日记数</div>
+                        </div>
+                        <div class="stats-item">
+                            <div class="stats-number">5</div>
+                            <div class="stats-label">日记本数量</div>
+                        </div>
+                        <div class="stats-item">
+                            <div class="stats-number">1,234</div>
+                            <div class="stats-label">总字数</div>
+                        </div>
+                    </div>
+                    <div class="stats-mood">
+                        <h3>心情统计</h3>
+                        <div class="mood-grid">
+                            <div class="mood-item">😈 调皮 35%</div>
+                            <div class="mood-item">😊 开心 25%</div>
+                            <div class="mood-item">😠 生气 20%</div>
+                            <div class="mood-item">🥰 感动 15%</div>
+                            <div class="mood-item">🤔 思考 5%</div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+        
+      
+          <!-- 日记精选 -->
+          <div class="content-box diary-collection">
+            <h2>📚 日记精选</h2>
+            <div class="collection-grid">
+                <div class="diary-card">
+                    <div class="card-header">
+                        <span class="card-date">2025.10.15</span>
+                        <span class="card-weather">🌧️</span>
+                    </div>
+                    <h3>米粒睡大觉</h3>
+                    <div class="card-content">
+                        <p>天天爱睡觉，和我说口腔溃疡继续吃上火的东西。还不让我截屏表情包了，严谨的检查我的手机，可恶！他变聪明了</p>
+                        <p>哼哼！虽然我删了但是我又有了新的一张！耶耶耶！！</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-mood">😤</span>
+                    </div>
+                </div>
+                <div class="diary-card">
+                    <div class="card-header">
+                        <span class="card-date">2025.10.1</span>
+                        <span class="card-weather">☁️</span>
+                    </div>
+                    <h3>看兔子谈恋爱</h3>
+                    <div class="card-content">
+                      <p>好期待啊今天兔子就要和狗子见面了，不知道他俩见面啥样的。毕竟看狗子这么紧张也是稀奇</p>
+                        <p>狗子准备了花，我给他推荐了很多花店，but他选择自己买。他给我拍照片了，虽然看着照片还可以，但是我觉得不如我挑的。兔子和我说，她要准备很久。。怎么说呢总体我很欣慰</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-mood">😎</span>
+                    </div>
+                </div>
+                <div class="diary-card">
+                    <div class="card-header">
+                        <span class="card-date">2025.08.12</span>
+                        <span class="card-weather">⛅</span>
+                    </div>
+                    <h3>出去玩</h3>
+                    <div class="card-content">
+                      <p>好无聊明明放假了却躺在宿舍这么多天，终于出门了！！！！</p>
+                        <p>吃到了铁锅炖，还去了洗浴中心。。嗯和我想象中差不多！</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="card-mood">😠→😊</span>
+                    </div>
+                </div>
+            </div>
+            <button class="view-more">查看更多日记</button>
+        </div>
+
+
+    </div>
+    
+    
+        
+   
+
+     
+<footer>
+    <div class="container">
+        <div class="social-links">
+            <a href="#">❤️</a>
+            <a href="#">📱</a>
+            <a href="#">🎵</a>
+            <a href="#">📺</a>
+            <a href="#">🛒</a>
+        </div>
+        
+    </div>
+</footer>
+    <script>
+        // 轮播图功能
+        const slides = document.querySelector('.slides');
+        const dots = document.querySelectorAll('.slider-dot');
+        let currentIndex = 0;
+        
+        function goToSlide(index) {
+            slides.style.transform = `translateX(-${index * 33.33}%)`;
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[index].classList.add('active');
+            currentIndex = index;
+        }
+        
+        dots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                goToSlide(parseInt(this.dataset.index));
+            });
+        });
+        
+        // 自动轮播
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % 3;
+            goToSlide(currentIndex);
+        }, 3000);
+        
+        // 搜索功能
+        document.querySelector('.search-box button').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-box input').value;
+            if (searchTerm.trim() !== '') {
+                alert('您搜索了: ' + searchTerm + '\n(这是一个模拟搜索功能)');
+            } else {
+                alert('请输入搜索内容');
+            }
+        });
+        
+             // 导航栏当前页指示  
+const navLinks = document.querySelectorAll('.nav-links a');  
+navLinks.forEach(link => {  
+    link.addEventListener('click', function() {  
+        // 先清除所有链接的背景色  
+        navLinks.forEach(l => l.style.backgroundColor = 'transparent');  
+        // 然后为当前点击的链接设置背景色  
+        this.style.backgroundColor = '#9932cc';  
+    });  
+});  
+        
+        // 默认激活首页链接
+        window.onload = function() {
+            navLinks[4].style.backgroundColor = '#9932cc';
+        };
+    </script>
+     
+   
+     <script>
+        // 查看更多日记按钮
+        document.querySelector('.view-more').addEventListener('click', function() {
+            alert('即将跳转到完整日记列表页面');
+        });
+        
+        // 分类点击效果
+        document.querySelectorAll('.category-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const category = this.querySelector('.category-name').textContent;
+                alert(`即将显示"${category}"分类的日记`);
+            });
+        });
+        
+        // 热门日记点击效果
+        document.querySelectorAll('.popular-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const title = this.querySelector('h3').textContent;
+                alert(`即将阅读"${title}"日记`);
+            });
+        });
+    </script>
+
+
+
+</body>
+</html>

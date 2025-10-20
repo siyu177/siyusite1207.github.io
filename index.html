@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>siyu</title>
+	<link type="text/css" rel="stylesheet" href="css/index.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5e6ff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        /* 轮播图样式 */
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .slides {
+            display: flex;
+            width: 300%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .slide {
+            width: 33.33%;
+            height: 100%;
+            flex-shrink: 0;
+            position: relative;
+        }
+        
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(106, 13, 173, 0.7);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .slider-nav {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .slider-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        
+        .slider-dot.active {
+            background: white;
+        }
+
+        
+        /* 导航栏 */
+        nav {
+      
+            background-color: #8a2be2;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin-left: 200px;
+        }
+        
+        .nav-links li {
+            margin-right: 10px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background-color: #9932cc;
+            transform: translateY(-2px);
+        }
+        
+        .search-box {
+            display: flex;
+        }
+        
+        .search-box input {
+            padding: 8px;
+            border: none;
+            border-radius: 3px 0 0 3px;
+            width: 200px;
+        }
+        
+        .search-box button {
+            padding: 8px 15px;
+            background-color: #4b0082;
+            color: white;
+            border: none;
+            border-radius: 0 3px 3px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .search-box button:hover {
+            background-color: #5e00a3;
+        }
+        
+        /* 主要内容区 */
+        .main-content {
+            width: 90%;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-left: 70px;
+        }
+        
+        /* 内容框通用样式 */
+        .content-box {
+            background-color: white;
+            border: 2px solid #8a2be2;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .content-box h2 {
+            color: #6a0dad;
+            border-bottom: 2px solid #e6ccff;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .content-box p {
+            text-indent: 2em;
+            margin-bottom: 15px;
+        }
+        
+        /* 图片展示区 */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .gallery img {
+            width: 100%;
+            border: 2px solid #ba55d3;
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+        
+        .gallery img:hover {
+            transform: scale(1.03);
+        }
+        
+        /* 视频和音频区 */
+        .media-container {
+            margin: 20px 0;
+        }
+        
+        video, audio {
+            width: 100%;
+            border-radius: 5px;
+        }
+        
+        /* 侧边栏 */
+        .sidebar .content-box {
+            background-color: #f0e6ff;
+           padding: 23px;
+        }
+        
+        /* 页脚 */
+        footer {
+            background: linear-gradient(to right, #6a0dad, #8a2be2);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+        
+        .social-links {
+            margin: 15px 0;
+        }
+        
+        .social-links a {
+            color: white;
+            margin: 0 10px;
+            font-size: 24px;
+            text-decoration: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .slider {
+                height: 250px;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-bottom: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .search-box {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .search-box input {
+                width: 70%;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    
+    <div class="container">
+        <!-- 轮播图 -->
+        <div class="slider">
+            <div class="slides">
+                <div class="slide">
+                    <img src="img/微信图片_20251013195942_75_255.jpg" alt="轮播图1">
+                   
+                </div>
+               <div class="slide">
+                    <img src="img/微信图片_20251013195941_74_255.jpg.jpg" alt="轮播图2">
+                </div>
+                <div class="slide">
+                    <img src="img/微信图片_20251013195943_76_255.jpg" alt="轮播图3">
+                </div>
+            </div>
+            
+        </div>
+        
+        <nav>
+            <div class="nav-container">
+                <ul class="nav-links">
+                    <li><a href="./index.html">首页</a></li>
+                    <li><a href="./about.html">关于我</a></li>
+                    <li><a href="./phone.html">相册集</a></li>
+                    <li><a href="./view.html">视频专区</a></li>
+                    <li><a href="./book.html">日记本</a></li>
+                    <li><a href="./contact.html">联系我</a></li>
+                </ul>
+                <div class="search-box">
+                    <input type="text" placeholder="搜索siyu大人相关内容...">
+                    <button>搜索</button>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="main-content">
+            <main>
+                <div class="content-box">
+                    <h2>Welcome to Lord Siyu's world</h2>
+                    <p></p>
+                    <p>幸福的每一天，降临在我身边。</p><p>我的好朋友有着彩虹一样的颜色，有着烘焙店里弥漫的面包香气，有着比热水袋还要温暖的拥抱，有着比羽毛枕头还柔软的心，有着从黑暗里拯救我的超能力，有着对我一百万吨的真诚心意。</p>
+                    <div class="gallery">
+                        <img src="img/微信图片_20251017154721_794_125.jpg" alt="图片1">
+                        <img src="img/微信图片_20251017154717_792_125.jpg" alt="图片2">
+                        <img src="img/微信图片_20251017154720_793_125.jpg" alt="图片3">
+                        <img src="img/微信图片_20251017154716_791_125.jpg" alt="图片4">
+						 <img src="img/微信图片_20251017155444_795_125.jpg" alt="图片5">
+                        <img src="img/微信图片_20251017154714_790_125.jpg" alt="图片6">
+                    </div>
+                </div>
+                
+                <div class="content-box">
+                    <h2>There is such a sentence in the Green Book.</h2>
+                    <p>《绿皮书》:"这世界上有各种各样的人，恰巧我们成为了朋友，这不是缘分，是因为我们本就应该是朋友。我一直都很庆幸认识身边的那些好友，在朋友这件事上我从不羡任何人，因为我的朋友足够棒，讲真的，你们在我身边我玩闹都有安全感。好的友谊一定是轻松的，可以无顾忌地分享快乐，也不避讳展露痛楚，彼此尊重，以及发自内心的相互欣赏，遇到这样的朋友真超级幸运。各有各的朋友，很庆幸能够成为你的朋友，没什么好炫耀的，世中逢尔，你胜过千万泛泛之交。”</p>
+                    <div class="media-container">
+                        <audio controls>
+                            <source src="img/212ac2e3c20e113093e6cd415cfb5a8a.mp4" type="audio/mpeg">
+                            您的浏览器不支持音频元素。
+                        </audio>
+                    </div>
+                </div>
+            </main>
+            
+            <aside class="sidebar">
+                <div class="content-box">
+                    <h2>The latest video</h2>
+                    <div class="media-container">
+                <video controls>
+                      <source src="img/4c39ef9957d7a0dbcdb559cbbf6f57bc.mp4" type="video/mp4">
+                </video>
+                    </div>
+                    
+                    <p>幸福是一个个让人感到温暖或平静的瞬间</p>
+                </div>
+                
+                <div class="content-box">
+                    <h2>about me</h2>
+                    <p>生日：12月7日</p>
+                    <p>最喜欢的颜色：all</p>
+                    <p>最喜欢的食物：奶茶</p>
+                    <p>爱好：写日记、听音乐</p>
+                </div>
+                
+                <div class="content-box">
+                    <h2>Some words</h2>
+                    <p>漆黑的夜空中有一轮时而皎洁的月亮是很能让人安静下来的，望着它就像产生了某种羁绊，</p><p>就算不说话也感觉它能体会到我们的感情，丝丝缕缕都能产生微小的共鸣。</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#">❤️</a>
+                <a href="#">📱</a>
+                <a href="#">🎵</a>
+                <a href="#">📺</a>
+                <a href="#">🛒</a>
+            </div>
+            
+        </div>
+    </footer>
+    
+    <script>
+        // 轮播图功能
+        const slides = document.querySelector('.slides');
+        const dots = document.querySelectorAll('.slider-dot');
+        let currentIndex = 0;
+        
+        function goToSlide(index) {
+            slides.style.transform = `translateX(-${index * 33.33}%)`;
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[index].classList.add('active');
+            currentIndex = index;
+        }
+        
+        dots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                goToSlide(parseInt(this.dataset.index));
+            });
+        });
+        
+        // 自动轮播
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % 3;
+            goToSlide(currentIndex);
+        }, 3000);
+        
+        // 搜索功能
+        document.querySelector('.search-box button').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-box input').value;
+            if (searchTerm.trim() !== '') {
+                alert('您搜索了: ' + searchTerm + '\n(这是一个模拟搜索功能)');
+            } else {
+                alert('请输入搜索内容');
+            }
+        });
+        
+        // 导航栏当前页指示
+       // 导航栏当前页指示  
+const navLinks = document.querySelectorAll('.nav-links a');  
+navLinks.forEach(link => {  
+    link.addEventListener('click', function() {  
+        // 先清除所有链接的背景色  
+        navLinks.forEach(l => l.style.backgroundColor = 'transparent');  
+        // 然后为当前点击的链接设置背景色  
+        this.style.backgroundColor = '#9932cc';  
+    });  
+});  
+        
+        // 默认激活首页链接
+        window.onload = function() {
+            navLinks[0].style.backgroundColor = '#9932cc';
+        };
+    </script>
+</body>
+</html>

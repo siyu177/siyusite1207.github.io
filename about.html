@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>about me</title>
+	<link type="text/css" rel="stylesheet" href="css/about.css">
+	
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5e6ff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        /* 轮播图样式 */
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .slides {
+            display: flex;
+            width: 300%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .slide {
+            width: 33.33%;
+            height: 100%;
+            flex-shrink: 0;
+            position: relative;
+        }
+        
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(106, 13, 173, 0.7);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .slider-nav {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .slider-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        
+        .slider-dot.active {
+            background: white;
+        }
+
+        
+        /* 导航栏 */
+        nav {
+      
+            background-color: #8a2be2;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin-left: 200px;
+        }
+        
+        .nav-links li {
+            margin-right: 10px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background-color: #9932cc;
+            transform: translateY(-2px);
+        }
+        
+        .search-box {
+            display: flex;
+        }
+        
+        .search-box input {
+            padding: 8px;
+            border: none;
+            border-radius: 3px 0 0 3px;
+            width: 200px;
+        }
+        
+        .search-box button {
+            padding: 8px 15px;
+            background-color: #4b0082;
+            color: white;
+            border: none;
+            border-radius: 0 3px 3px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .search-box button:hover {
+            background-color: #5e00a3;
+        }
+        
+        /* 主要内容区 */
+       
+
+    /* 主内容区样式 */
+    .main-content {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+        margin-top: 20px;
+        width: 90%;
+        margin-left: 70px;
+    }
+    
+    /* 内容框基础样式 */
+    .content-box {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 5px 15px rgba(138, 43, 226, 0.1);
+        border: 2px solid #e6ccff;
+    }
+    
+    .content-box h2 {
+        color: #6a0dad;
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 22px;
+        position: relative;
+        padding-bottom: 10px;
+    }
+    
+    .content-box h2:after {
+        content: "";
+        display: block;
+        width: 80px;
+        height: 3px;
+        background: linear-gradient(to right, #ff69b4, #8a2be2);
+        margin: 10px auto 0;
+    }
+    
+    .kuromi-icon {
+        color: #ff69b4;
+        margin: 0 5px;
+    }
+    
+    /* 文字缩进 */
+    .indent {
+        text-indent: 2em;
+        margin-bottom: 15px;
+        line-height: 1.8;
+    }
+    
+    /* 角色介绍区域 */
+    .character-intro {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+    
+    .character-text {
+        flex: 1;
+    }
+    
+    .character-image {
+        flex: 0 0 250px;
+        text-align: center;
+        position: relative;
+        margin-top: -30px;
+    }
+    
+    .character-img {
+        width: 100%;
+        border-radius: 10px;
+        
+    }
+    
+    .character-tag {
+        background: #6a0dad;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        display: inline-block;
+        margin-top: 10px;
+        font-size: 14px;
+    }
+    
+    /* 图片大放送区域 */
+    .photo-showcase {
+        margin-top: 20px;
+    }
+    
+    .showcase-main {
+        margin-bottom: 20px;
+        position: relative;
+    }
+    
+    .main-photo {
+        width: 100%;
+        border-radius: 10px;
+        border: 3px solid #ba55d3;
+    }
+    
+    .photo-caption {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        background: rgba(106, 13, 173, 0.7);
+        color: white;
+        text-align: center;
+        padding: 8px;
+        border-radius: 0 0 7px 7px;
+    }
+    
+    .showcase-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .photo-item {
+        position: relative;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 2px solid #da70d6;
+    }
+    
+    .photo-item img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        transition: transform 0.3s;
+    }
+    
+    .photo-item:hover img {
+        transform: scale(1.05);
+    }
+    
+    .photo-label {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(138, 43, 226, 0.7);
+        color: white;
+        text-align: center;
+        padding: 5px;
+        font-size: 12px;
+    }
+    
+    /* 故事区域 */
+    .story-box {
+        background: linear-gradient(to bottom right, #f9f0ff, #e6ccff);
+    }
+    
+    .story-content {
+        display: flex;
+        gap: 20px;
+    }
+    
+    .story-image {
+        flex: 0 0 250px;
+    }
+    
+    .story-image img {
+        width: 100%;
+        border-radius: 10px;
+        border: 3px solid #9932cc;
+    }
+    
+    .story-text {
+        flex: 1;
+       line-height: 5%;
+    }
+    
+    /* 侧边栏样式 */
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+       
+    }
+    
+    /* 视频盒子 */
+    .video-box {
+        background: linear-gradient(to bottom right, #f0e6ff, #d8bfff);
+    }
+    
+    .video-container video {
+        width: 100%;
+        border-radius: 10px;
+        border: 2px solid #8a2be2;
+    }
+    
+    .video-info {
+        margin-top: 15px;
+    }
+    
+    .video-info h3 {
+        color: #6a0dad;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    
+    .video-meta {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: #666;
+        margin-top: 10px;
+    }
+    
+    /* 角色档案 */
+    .profile-box {
+        background: white;
+        text-align: center;
+    }
+    
+    .profile-content {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .profile-image {
+        flex: 0 0 100px;
+    }
+    
+    .profile-image img {
+        width: 100%;
+        border-radius: 50%;
+        border: 3px solid #ff69b4;
+    }
+    
+    .profile-list {
+        text-align: left;
+        flex: 1;
+        list-style: none;
+    }
+    
+    .profile-list li {
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+    
+    .profile-list strong {
+        color: #6a0dad;
+    }
+    
+    .profile-quote {
+        font-style: italic;
+        color: #8a2be2;
+        padding: 10px;
+        background: #f5e6ff;
+        border-radius: 5px;
+        margin-top: 15px;
+    }
+    
+    /* 粉丝互动区 */
+    .fan-box {
+        background: linear-gradient(to bottom right, #f5e6ff, #e6ccff);
+    }
+    
+    .fan-gallery {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .fan-item {
+        text-align: center;
+    }
+    
+    .fan-item img {
+        width: 100%;
+        border-radius: 5px;
+        border: 2px solid #ba55d3;
+    }
+    
+    .fan-item p {
+        font-size: 12px;
+        color: #666;
+        margin-top: 5px;
+    }
+    
+    .fan-button {
+        background: #8a2be2;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+        display: block;
+        width: 100%;
+        transition: background 0.3s;
+    }
+    
+    .fan-button:hover {
+        background: #6a0dad;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+        .main-content {
+            grid-template-columns: 1fr;
+        }
+        
+        .character-intro, .story-content {
+            flex-direction: column;
+        }
+        
+        .character-image, .story-image {
+            flex: 1 1 100%;
+        }
+        
+        .profile-content {
+            flex-direction: column;
+        }
+    }
+
+
+
+
+
+        
+        /* 页脚 */
+        footer {
+            background: linear-gradient(to right, #6a0dad, #8a2be2);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+        
+        .social-links {
+            margin: 15px 0;
+        }
+        
+        .social-links a {
+            color: white;
+            margin: 0 10px;
+            font-size: 24px;
+            text-decoration: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .slider {
+                height: 250px;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-bottom: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .search-box {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .search-box input {
+                width: 70%;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    
+    <div class="container">
+        <!-- 轮播图 -->
+        <div class="slider">
+            <div class="slides">
+                <div class="slide">
+                    <img src="img/微信图片_20251013195942_75_255.jpg" alt="轮播图1">
+                   
+                </div>
+                <div class="slide">
+                    <img src="img/微信图片_20251013195941_74_255.jpg.jpg" alt="轮播图2">
+                </div>
+                <div class="slide">
+                    <img src="img/微信图片_20251013195943_76_255.jpg" alt="轮播图3">
+					
+                </div>
+            </div>
+            
+        </div>
+        
+        <nav>
+            <div class="nav-container">
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="about.html">关于我</a></li>
+                    <li><a href="phone.html">相册集</a></li>
+                    <li><a href="view.html">视频专区</a></li>
+                    <li><a href="book.html">日记本</a></li>
+                    <li><a href="contact.html">联系我</a></li>
+                </ul>
+                <div class="search-box">
+                    <input type="text" placeholder="搜索siyu大人相关内容...">
+                    <button>搜索</button>
+                </div>
+            </div>
+        </nav>
+        <div class="main-content">
+    <main>
+        <!-- 库洛米角色介绍 -->
+        <div class="content-box">
+            <h2><span class="kuromi-icon">♥</span> About Me <span class="kuromi-icon">♡</span></h2>
+            <div class="character-intro">
+                <div class="character-text">
+                    <p class="indent"><p>我叫siyu，生于福建福州，长于福建福州</p>
+                    <p>“我一开始还以为你很高冷呢”</p>
+——这是人们对我的最大误解。</p>
+<p>真相是：性格外向、擅长接话，更擅长让人开心喜欢拥有反差萌的库洛米，她"外表叛逆、内心柔软"。</p>
+<p>我对世界永远怀有“下一站”式的好奇。
+这份好奇，带我走进很多不同的层级，体验了不同的事物</p>
+<p>认准的事，不会轻易松手。
+无论是设计、学业，还是在乎的人与事。</p>
+<p>Right now正在寻找一个能让我这份热烈、细腻与执着，彻底绽放的舞台。</p>
+                   
+                </div>
+                <div class="character-image">
+                    <img src="img/吃饭.jpg" alt="吃饭" class="character-img">
+                    <div class="character-tag">"幸福降临手心"</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图片大放送模块 -->
+        <div class="content-box">
+            <h2>☆ siyu大人生日篇 ☆</h2>
+            <div class="photo-showcase">
+                
+                <div class="showcase-grid">
+                    <div class="photo-item">
+                        <img src="img/微信图片_20251013195942_75_255.jpg" alt="日常">
+                        <div class="photo-label">初雪半身集</div>
+                    </div>
+                    <div class="photo-item">
+                        <img src="img/微信图片_20251013195945_77_255.jpg" alt="冬天">
+                        <div class="photo-label">初雪正脸集</div>
+                    </div>
+                    <div class="photo-item">
+                        <img src="img/微信图片_20251013195946_78_255.jpg" alt="冬天">
+                        <div class="photo-label">撑伞集</div>
+                    </div>
+                    <div class="photo-item">
+                        <img src="img/微信图片_20251015140604_782_125.jpg" alt="冬天">
+                        <div class="photo-label">大雪</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 库洛米日常故事 -->
+        <div class="content-box story-box">
+            <h2>♬ The last two years ♬</h2>
+            <div class="story-content">
+                <div class="story-image">
+                    <img src="img/兔子.jpg" alt="近几年">
+                    <img src="img/pic4.jpg" alt="近几年">
+                    <img src="./img/微信图片_20251013200000_88_255.jpg" alt="近几年">
+
+
+                </div>
+                <div class="story-text">
+                    <p class="indent">2024.5 文体活动标兵</p>  
+<p class="indent">2024-2025学年第一学期 第十三届全国大学生海洋文化创意设计大赛国家级优秀奖  </p>
+<p class="indent">2024-2025学年第一学期 中国大学生广告艺术节学院奖（国赛）国家级入围奖  </p>
+<p class="indent">2024-2025学年第一学期 2024WZD纹藏国际纹样设计大赛国家级人气奖  </p>
+
+<p class="indent">2024.12 社会实践先进个人  </p>
+<p class="indent">2024.12 优秀学生干部  </p>
+
+<p class="indent">2024-2025学年第二学期 第十届“包豪斯奖”国际设计大赛国家级银奖  </p>
+<p class="indent">2024-2025学年第二学期 2025年第九届米兰设计周省部级三等奖 </p> 
+<p class="indent">2024-2025学年第二学期 “器道·新生”第七届香港当代设计大赛省部级铜奖  </p>
+<p class="indent">2024-2025学年第二学期 第13届未来设计师·全国高校数字艺术设计大赛省部级银奖  </p>
+<p class="indent">2024-2025学年第二学期 2025挑战杯吉林省大学生课外学术科技作品竞赛省部级银奖  </p>
+<p class="indent">2024-2025学年第二学期 2025中国大学生广告艺术节学院奖国家级入围奖（2项） </p> 
+<p class="indent">2024-2025学年第二学期 2025年第十一届东方设计奖·全国高校创新设计大赛省部级三等奖  </p>
+<p class="indent">2024-2025学年第二学期 第十九届中国好创意暨全国数字艺术设计大赛省部级铜奖  </p>
+
+<p class="indent">2025.5 优秀学生干部</p>  
+<p class="indent">2025.10 优秀学生干部</p>
+                    
+                
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <aside class="sidebar">
+        <!-- 最新视频 -->
+        <div class="content-box video-box">
+            <h2>▶ Vlog分享</h2>
+            <div class="video-container">
+         
+<video width="80%" height="80%" controls poster="">
+    <source   src="img/4c39ef9957d7a0dbcdb559cbbf6f57bc.mp4" type="video/mp4">
+</video>
+                
+                <div class="video-info">
+                    <h3>"街头vlog！"</h3>
+                    <p>第一次见面~~~</p>
+                    <div class="video-meta">
+                        <span>观看次数: 1201</span>
+                        <span>发布时间: 2025.9.11</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 角色档案 -->
+        <div class="content-box profile-box">
+            <h2>✧ siyu大人 ✧</h2>
+            <div class="profile-content">
+                <div class="profile-image">
+                    <img src="img/下雨.jpg" alt="头像">
+                </div>
+                <ul class="profile-list">
+                    <li><strong>生日:</strong> 12月7日</li>
+                    <li><strong>颜色:</strong> all</li>
+                    <li><strong>性格:</strong> 开朗活泼</li>
+                    <li><strong>爱好:</strong> 写日记、听音乐</li>
+                    
+                </ul>
+            </div>
+            <div class="profile-quote">
+                "一点一滴组成淡淡的幸福"
+            </div>
+        </div>
+
+        <!-- 粉丝互动 -->
+        <div class="content-box fan-box">
+            <h2>★ In the dusk ★</h2>
+            <div class="fan-gallery">
+                <div class="fan-item">
+                    <img src="img/日落.jpg" alt="日落1">
+                    <p>PINGTAN</p>
+                </div>
+                <div class="fan-item">
+                    <img src="img/日落2.jpg" alt="日落2">
+                    <p>FENGCHE GU</p>
+                </div>
+            </div>
+            <div class="fan-cta">
+                <button class="fan-button">分享日落</button>
+            </div>
+        </div>
+        
+      
+    </aside>
+</div>
+
+
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#">❤️</a>
+                <a href="#">📱</a>
+                <a href="#">🎵</a>
+                <a href="#">📺</a>
+                <a href="#">🛒</a>
+            </div>
+            
+        </div>
+    </footer>
+    
+    <script>
+        // 轮播图功能
+        const slides = document.querySelector('.slides');
+        const dots = document.querySelectorAll('.slider-dot');
+        let currentIndex = 0;
+        
+        function goToSlide(index) {
+            slides.style.transform = `translateX(-${index * 33.33}%)`;
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[index].classList.add('active');
+            currentIndex = index;
+        }
+        
+        dots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                goToSlide(parseInt(this.dataset.index));
+            });
+        });
+        
+        // 自动轮播
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % 3;
+            goToSlide(currentIndex);
+        }, 3000);
+        
+        // 搜索功能
+        document.querySelector('.search-box button').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-box input').value;
+            if (searchTerm.trim() !== '') {
+                alert('您搜索了: ' + searchTerm + '\n(这是一个模拟搜索功能)');
+            } else {
+                alert('请输入搜索内容');
+            }
+        });
+        
+             // 导航栏当前页指示  
+const navLinks = document.querySelectorAll('.nav-links a');  
+navLinks.forEach(link => {  
+    link.addEventListener('click', function() {  
+        // 先清除所有链接的背景色  
+        navLinks.forEach(l => l.style.backgroundColor = 'transparent');  
+        // 然后为当前点击的链接设置背景色  
+        this.style.backgroundColor = '#9932cc';  
+    });  
+});  
+        
+        // 默认激活首页链接
+        window.onload = function() {
+            navLinks[1].style.backgroundColor = '#9932cc';
+        };
+    </script>
+    
+<script>
+    // 图片悬停效果
+    document.querySelectorAll('.photo-item').forEach(item => {
+        item.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+            this.style.boxShadow = '0 5px 15px rgba(138, 43, 226, 0.3)';
+        });
+        
+        item.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+            this.style.boxShadow = '';
+        });
+    });
+    
+    // 粉丝按钮点击效果
+    document.querySelector('.fan-button').addEventListener('click', function() {
+        alert('感谢您想投稿作品！请将作品发送至我们的官方邮箱。');
+    });
+    
+    // 视频播放统计
+    document.querySelector('video').addEventListener('play', function() {
+        console.log('用户开始观看视频');
+    });
+</script>
+
+</body>
+</html>

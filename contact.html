@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>siyu</title>
+	<link type="text/css" rel="stylesheet" href="css/contact.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background-color: #f5e6ff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        /* 轮播图样式 */
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .slides {
+            display: flex;
+            width: 300%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .slide {
+            width: 33.33%;
+            height: 100%;
+            flex-shrink: 0;
+            position: relative;
+        }
+        
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(106, 13, 173, 0.7);
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .slider-nav {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .slider-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        
+        .slider-dot.active {
+            background: white;
+        }
+
+        
+        /* 导航栏 */
+        nav {
+      
+            background-color: #8a2be2;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin-left: 200px;
+        }
+        
+        .nav-links li {
+            margin-right: 10px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+        
+        .nav-links a:hover {
+            background-color: #9932cc;
+            transform: translateY(-2px);
+        }
+        
+        .search-box {
+            display: flex;
+        }
+        
+        .search-box input {
+            padding: 8px;
+            border: none;
+            border-radius: 3px 0 0 3px;
+            width: 200px;
+        }
+        
+        .search-box button {
+            padding: 8px 15px;
+            background-color: #4b0082;
+            color: white;
+            border: none;
+            border-radius: 0 3px 3px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .search-box button:hover {
+            background-color: #5e00a3;
+        }
+        
+      
+            /* 主内容区样式 */
+            .main-content {
+                display: grid;
+                grid-template-columns: 2fr 1fr;
+                gap: 30px;
+                margin-top: 20px;
+                width: 90%;
+                margin-left: 60px;
+            }
+            
+            /* 内容框基础样式 */
+            .content-box {
+                background: white;
+                border-radius: 15px;
+                padding: 25px;
+                margin-bottom: 30px;
+                box-shadow: 0 5px 15px rgba(138, 43, 226, 0.1);
+                border: 2px solid #e6ccff;
+            }
+            
+            /* 联系标题 */
+            .contact-header {
+                text-align: center;
+                background: linear-gradient(135deg, #f5e6ff, #e6ccff);
+            }
+            
+            .contact-header h1 {
+                color: #6a0dad;
+                font-size: 28px;
+                margin-bottom: 15px;
+            }
+            
+            .contact-intro {
+                max-width: 600px;
+                margin: 0 auto 20px;
+                line-height: 1.8;
+                color: #555;
+            }
+            
+            .header-image img {
+                max-width: 200px;
+                border-radius: 10px;
+                border: 3px solid #8a2be2;
+            }
+            
+            /* 联系表单 */
+            .contact-form h2 {
+                color: #6a0dad;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            
+            .form-container {
+                max-width: 600px;
+                margin: 0 auto;
+            }
+            
+            .form-group {
+                margin-bottom: 20px;
+            }
+            
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: #6a0dad;
+                font-weight: bold;
+            }
+            
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #e6ccff;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+            
+            .form-group textarea {
+                resize: vertical;
+            }
+            
+            .form-actions {
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+                margin-top: 30px;
+            }
+            
+            .submit-btn, .reset-btn {
+                padding: 10px 25px;
+                border: none;
+                border-radius: 30px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+            
+            .submit-btn {
+                background: #8a2be2;
+                color: white;
+            }
+            
+            .reset-btn {
+                background: #e6ccff;
+                color: #6a0dad;
+            }
+            
+            .submit-btn:hover {
+                background: #6a0dad;
+                transform: translateY(-2px);
+            }
+            
+            .reset-btn:hover {
+                background: #d8bfff;
+                transform: translateY(-2px);
+            }
+            
+            /* 其他联系方式 */
+            .contact-methods h2 {
+                color: #6a0dad;
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            
+            .methods-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+            }
+            
+            .method-card {
+                background: #f9f0ff;
+                border-radius: 10px;
+                padding: 20px;
+                text-align: center;
+                transition: transform 0.3s;
+            }
+            
+            .method-card:hover {
+                transform: translateY(-5px);
+            }
+            
+            .method-icon {
+                font-size: 40px;
+                margin-bottom: 10px;
+            }
+            
+            .method-card h3 {
+                color: #8a2be2;
+                margin-bottom: 10px;
+            }
+            
+            .method-card p {
+                margin-bottom: 15px;
+                line-height: 1.6;
+            }
+            
+            .method-btn {
+                padding: 8px 15px;
+                background: #8a2be2;
+                color: white;
+                border: none;
+                border-radius: 20px;
+                cursor: pointer;
+                transition: background 0.3s;
+            }
+            
+            .method-btn:hover {
+                background: #6a0dad;
+            }
+            
+            /* 侧边栏样式 */
+            .sidebar {
+                display: flex;
+                flex-direction: column;
+               margin-bottom: -10px;
+              
+            }
+            
+            /* 常见问题 */
+            .faq h2 {
+                color: #6a0dad;
+                margin-bottom: 15px;
+            }
+            
+            .faq-list {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .faq-item {
+                padding-bottom: 15px;
+                border-bottom: 1px dashed #e6ccff;
+            }
+            
+            .faq-item:last-child {
+                border-bottom: none;
+            }
+            
+            .faq-item h3 {
+                color: #8a2be2;
+                font-size: 16px;
+                margin-bottom: 8px;
+            }
+            
+            .faq-item p {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+            
+            /* 社交媒体 */
+            .social-media h2 {
+                color: #6a0dad;
+                margin-bottom: 15px;
+            }
+            
+            .social-buttons {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+            
+            .social-btn {
+                padding: 8px;
+                border-radius: 5px;
+                text-align: center;
+                color: white;
+                font-size: 14px;
+                text-decoration: none;
+                transition: transform 0.3s;
+            }
+            
+            .social-btn:hover {
+                transform: translateY(-3px);
+            }
+            
+            .weibo { background: #e6162d; }
+            .wechat { background: #07c160; }
+            .bilibili { background: #fb7299; }
+            .douyin { background: #000; }
+            .xiaohongshu { background: #ff2442; }
+            
+            .qr-code {
+                text-align: center;
+            }
+            
+            .qr-code img {
+                width: 150px;
+                margin-bottom: 10px;
+                border: 2px solid #8a2be2;
+                border-radius: 5px;
+            }
+            
+            .qr-code p {
+                font-size: 12px;
+                color: #666;
+            }
+            
+            /* 粉丝俱乐部 */
+            .fan-club h2 {
+                color: #6a0dad;
+                margin-bottom: 15px;
+            }
+            
+            .club-info p {
+                margin-bottom: 15px;
+                line-height: 1.6;
+            }
+            
+            .club-benefits {
+                margin-bottom: 20px;
+                padding-left: 20px;
+            }
+            
+            .club-benefits li {
+                margin-bottom: 8px;
+            }
+            
+            .join-btn {
+                display: block;
+                width: 100%;
+                padding: 10px;
+                background: #ff69b4;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+            
+            .join-btn:hover {
+                background: #e6539b;
+                transform: translateY(-2px);
+            }
+            
+            /* 响应式设计 */
+            @media (max-width: 768px) {
+                .main-content {
+                    grid-template-columns: 1fr;
+                }
+                
+                .methods-grid {
+                    grid-template-columns: 1fr;
+                }
+                
+                .social-buttons {
+                    grid-template-columns: 1fr;
+                }
+            }
+        
+        
+        /* 页脚 */
+        footer {
+            background: linear-gradient(to right, #6a0dad, #8a2be2);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+        
+        .social-links {
+            margin: 15px 0;
+        }
+        
+        .social-links a {
+            color: white;
+            margin: 0 10px;
+            font-size: 24px;
+            text-decoration: none;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .slider {
+                height: 250px;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-container {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                margin-bottom: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .search-box {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .search-box input {
+                width: 70%;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    
+    <div class="container">
+        <!-- 轮播图 -->
+        <div class="slider">
+            <div class="slides">
+                <div class="slide">
+                    <img src="img/微信图片_20251013195942_75_255.jpg" alt="轮播图1">
+                   
+                </div>
+                <div class="slide">
+                    <img src="img/微信图片_20251013195941_74_255.jpg.jpg" alt="轮播图2">
+                </div>
+                <div class="slide">
+                    <img src="img/微信图片_20251013195943_76_255.jpg" alt="轮播图3">
+                </div>
+            </div>
+            
+        </div>
+        
+        <nav>
+            <div class="nav-container">
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="about.html">关于我</a></li>
+                    <li><a href="phone.html">相册集</a></li>
+                    <li><a href="view.html">视频专区</a></li>
+                    <li><a href="book.html">日记本</a></li>
+                    <li><a href="contact.html">联系我</a></li>
+                </ul>
+                <div class="search-box">
+                    <input type="text" placeholder="搜索siyu大人相关内容...">
+                    <button>搜索</button>
+                </div>
+            </div>
+        </nav>
+        
+       
+        <div class="main-content">
+            <main>
+                <!-- 联系标题 -->
+                <div class="content-box contact-header">
+                    <h1>📮 联系Linsiyu大人</h1>
+                    <p class="contact-intro">想和linsiyu分享你的想法、建议或者只是想打个招呼吗？</p>
+                    <p>通过以下方式联系siyu大人吧！</p>
+                    
+                </div>
+        
+                <!-- 联系表单 -->
+                <div class="content-box contact-form">
+                    <h2>✍️ 给我留言</h2>
+                    <form class="form-container">
+                        <div class="form-group">
+                            <label for="name">你的名字</label>
+                            <input type="text" id="name" placeholder="请输入你的名字" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">电子邮箱</label>
+                            <input type="email" id="email" placeholder="请输入你的邮箱" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">主题</label>
+                            <select id="subject" required>
+                                <option value="" disabled selected>请选择主题</option>
+                                <option value="fan">留言</option>
+                                <option value="suggestion">建议反馈</option>
+                                <option value="business">自我推荐</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">留言内容</label>
+                            <textarea id="message" rows="5" placeholder="siyu大人想知道你的问题..." required></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="submit-btn">发送留言</button>
+                            <button type="reset" class="reset-btn">重新填写</button>
+                        </div>
+                    </form>
+                </div>
+        
+                <!-- 其他联系方式 -->
+                <div class="content-box contact-methods">
+                    <h2>📱 其他联系方式</h2>
+                    <div class="methods-grid">
+                        <div class="method-card">
+                            <div class="method-icon">📧</div>
+                            <h3>电子邮件</h3>
+                            <p>943780971@qq.com</p>
+                            <button class="method-btn">复制邮箱</button>
+                        </div>
+                        <div class="method-card">
+                            <div class="method-icon">🏢</div>
+                            <h3>官方地址</h3>
+                            <p>吉林动画学院<br>吉林省长春市</p>
+                            <button class="method-btn">查看地图</button>
+                        </div>
+                        <div class="method-card">
+                            <div class="method-icon">💌</div>
+                            <h3>好友交流信箱</h3>
+                            <p>DY<br>破坏大王</p>
+                            <button class="method-btn">写信指南</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            
+            <aside class="sidebar">
+                <!-- 常见问题 -->
+                <div class="content-box faq">
+                    <h2>❓ 常见问题</h2>
+                    <div class="faq-list">
+                        <div class="faq-item">
+                            <h3>siyu大人有时为什么不及时回消息？</h3>
+                            <p>siyu大人可能在上课、做作业、开会、干活、画画、看电视剧、金铲铲之战、无畏契约、王者荣耀、等等等等</p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>能让siyu大人给我画画吗？</h3>
+                            <p>看siyu大人心情</p>
+                        </div>
+                        <div class="faq-item">
+                            <h3>怎么和siyu大人一起玩游戏？</h3>
+                            <p>能够确保带飞siyu大人以及和她的朋友萌</p>
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- 社交媒体 -->
+                <div class="content-box social-media">
+                    <h2>🌐 社交媒体</h2>
+                    <div class="social-buttons">
+                        <a href="#" class="social-btn weibo">微博</a>
+                        <a href="#" class="social-btn wechat">微信</a>
+                        <a href="#" class="social-btn bilibili">Bilibili</a>
+                        <a href="#" class="social-btn douyin">抖音</a>
+                        <a href="#" class="social-btn xiaohongshu">小红书</a>
+                    </div>
+                    <div class="qr-code">
+                        <img src="img/微信图片_20251015141401_783_125.jpg" alt="dy二维码">
+                        <img src="img/微信图片_20251015141403_784_125.jpg" alt="dy二维码">
+                        <p>siyu大人的dy</p>
+                    </div>
+                </div>
+        
+                <!-- 粉丝俱乐部 -->
+                <div class="content-box fan-club">
+                    <h2>❤️ 带飞siyu大人和她的朋友萌</h2>
+                    <div class="club-info">
+                        <p>成功带飞享受以下特权：</p>
+                        <ul class="club-benefits">
+                            <li>游戏时间第一个被联系</li>
+                            <li>状态不好没手感免责</li>
+                            <li>活动优先报名权</li>
+                            <li>生日特别祝福</li>
+                        </ul>
+                        <button class="join-btn">立即加入</button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+        
+        
+        
+      
+
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#">❤️</a>
+                <a href="#">📱</a>
+                <a href="#">🎵</a>
+                <a href="#">📺</a>
+                <a href="#">🛒</a>
+            </div>
+            
+        </div>
+    </footer>
+    
+    <script>
+        // 轮播图功能
+        const slides = document.querySelector('.slides');
+        const dots = document.querySelectorAll('.slider-dot');
+        let currentIndex = 0;
+        
+        function goToSlide(index) {
+            slides.style.transform = `translateX(-${index * 33.33}%)`;
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[index].classList.add('active');
+            currentIndex = index;
+        }
+        
+        dots.forEach(dot => {
+            dot.addEventListener('click', function() {
+                goToSlide(parseInt(this.dataset.index));
+            });
+        });
+        
+        // 自动轮播
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % 3;
+            goToSlide(currentIndex);
+        }, 3000);
+        
+        // 搜索功能
+        document.querySelector('.search-box button').addEventListener('click', function() {
+            const searchTerm = document.querySelector('.search-box input').value;
+            if (searchTerm.trim() !== '') {
+                alert('您搜索了: ' + searchTerm + '\n(这是一个模拟搜索功能)');
+            } else {
+                alert('请输入搜索内容');
+            }
+        });
+        
+              // 导航栏当前页指示  
+const navLinks = document.querySelectorAll('.nav-links a');  
+navLinks.forEach(link => {  
+    link.addEventListener('click', function() {  
+        // 先清除所有链接的背景色  
+        navLinks.forEach(l => l.style.backgroundColor = 'transparent');  
+        // 然后为当前点击的链接设置背景色  
+        this.style.backgroundColor = '#9932cc';  
+    });  
+});  
+      
+        
+        // 默认激活首页链接
+        window.onload = function() {
+            navLinks[5].style.backgroundColor = '#9932cc';
+        };
+    </script>
+      <script>
+        // 表单提交
+        document.querySelector('.form-container').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('感谢你的留言！siyu大人会尽快回复你~');
+            this.reset();
+        });
+        
+        // 复制邮箱
+        document.querySelector('.method-btn').addEventListener('click', function() {
+            const email = '943780971@qq.com';
+            navigator.clipboard.writeText(email).then(() => {
+                alert(`已复制邮箱: ${email}`);
+            });
+        });
+        
+        // 加入粉丝俱乐部
+        document.querySelector('.join-btn').addEventListener('click', function() {
+            alert('即将跳转到vip注册页面');
+        });
+        
+        // 社交媒体按钮点击
+        document.querySelectorAll('.social-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert(`即将跳转到siyu大人${this.textContent}主页`);
+            });
+        });
+    </script>
+
+</body>
+</html>
